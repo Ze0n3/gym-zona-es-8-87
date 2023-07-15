@@ -1,0 +1,33 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: url(../img/lissta.jpg) no-repeat center top;
+    background-size: cover;
+    font-family: sans-serif;
+    height: 100vh;
+}
+
+table{
+    margin-top: 10px;
+    margin-left: 10px;
+    width:100%;
+    background-color: #ffffff7a;
+    text-align: left;
+    border: collapse;
+    Text-align:Center;
+}
+
+td,th{
+    padding:20px;
+    border-style: groove;
+}
+
+thead{
+    background-color: #edb612dd;
+}
+
+a{
+    margin-left: 10px;
+    font-size: 20px;
+    color: rgb(255, 255, 255);
+}
