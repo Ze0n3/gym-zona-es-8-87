@@ -103,12 +103,12 @@ $fila = $info -> fetch();
                 </a>
                 <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
-                    <form action="" method="post">
+                    <form action="" method="get">
                         <div class="bg-white py-2 collapse-inner rounded">
                             <h6 class="collapse-header">Crear</h6>
                             <a class="collapse-item" href="crear/registrocli.php">Clientes</a>                
                             <a class="collapse-item" href="crear/registrocoa.php">Coachs</a>
-                            <a class="collapse-item" href="crear/datos.php">Datos</a>   
+                            <a class="collapse-item" href="crear/datos.php?datos=hola">Datos</a>   
                             <a class="collapse-item" href="crear/c_genero.php">Genero</a>  
                             <a class="collapse-item" href="crear/medidas.php">Medidas</a>  
                             <a class="collapse-item" href="crear/new_p.php">Productos</a>   

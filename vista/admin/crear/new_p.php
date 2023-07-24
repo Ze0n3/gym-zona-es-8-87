@@ -1,43 +1,3 @@
-<?php
-require_once("../../../base_datos/bd.php");
-$daba = new Database();
-$conex = $daba->conectar();
-?>
-
-
-<?php
-$control1 = $conex->prepare("SELECT * From usuarios WHERE tipo_usuario = 2");
-$control1->execute();
-$query1 = $control1->fetch();
-
-    if (isset($_POST["validar_V"])== "user")  {
-    $cedula = $_POST['document'];
-    $nombre= $_POST['nombre'];
-    $canti= $_POST['canti'];
-    $valor= $_POST['valor'];
-    $codi= $_POST['randomNumber'];
-
-
-    if ($codi == "" || $cedula == "" ||$nombre == "" ||$canti == "" ||$valor == "" ) {
-        
-        echo '<script>alert ("EXISTEN DATOS VACIOS");</script>';
-        echo '<script>window.location="new_p.php"</script>';
-
-    } else {
-       
-        $insertsql2 = $conex->prepare ("INSERT INTO productos(id_producto,cod_producto,nom_producto,precio,can_inicial,docu_ingre) VALUES ('$codi','$codi','$nombre','$valor','$canti','$cedula')");
-        $insertsql2->execute();
-        echo '<script>alert ("PRODUCTO AGREGADO EXITOSAMENTE");</script>';
-        echo '<script>window.location="new_p.php"</script>';
-    }
-}
-
-        
-
-
-?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -86,20 +46,71 @@ $query1 = $control1->fetch();
                                 <h1 class="h4 text-gray-900 mb-4">Agregar Productos</h1>
                             </div>
                             <br>
+<?php
+require_once("../../../base_datos/bd.php");
+$daba = new Database();
+$conex = $daba->conectar();
+?>
+
+
+<?php
+$control1 = $conex->prepare("SELECT * From usuarios WHERE tipo_usuario = 2");
+$control1->execute();
+$query1 = $control1->fetch();
+
+    if (isset($_POST["validar_V"]))  {
+    $cedula = $_POST['validar_V'];
+    $nombre= $_POST['nombre'];
+    $canti= $_POST['canti'];
+    $valor= $_POST['valor'];
+    $codi= $_POST['randomNumber'];
+
+
+    if ($codi == "" || $cedula == "" ||$nombre == "" ||$canti == "" ||$valor == "" ) {
+        
+        echo '<script>alert ("EXISTEN DATOS VACIOS");</script>';
+        echo '<script>window.location="new_p.php"</script>';
+
+    } else {
+       
+        $insertsql2 = $conex->prepare ("INSERT INTO productos(id_producto,cod_producto,nom_producto,precio,can_inicial,docu_ingre) VALUES ('$codi','$codi','$nombre','$valor','$canti','$cedula')");
+        $insertsql2->execute();
+        echo '<script>alert ("PRODUCTO AGREGADO EXITOSAMENTE");</script>';
+        echo '<script>window.location="new_p.php"</script>';
+    }
+}
+elseif ((isset($_POST["consul"]))){
+                                        
+                                    
+    if ($_POST['doc_cli'] == "") {
+
+        echo '<script>alert ("INGRESE EL NUMERO DE DOCUMENTO DEL CLIENTE");</script>';
+        echo '<script>window.location="./datos.php"</script>';
+    
+    }else{
+        
+
+        $cli = $_POST['doc_cli'];
+
+        $consu = $conex->prepare("SELECT * FROM usuarios WHERE documento = '$cli' AND tipo_usuario = 2");
+        $consu ->execute();
+        $ho = $consu->fetch();
+
+        if($ho){
+
+            date_default_timezone_set('America/Bogota');
+            $fechaActual = date ('Y-m-d' );
+            $fin = date("Y-m-d",strtotime($fechaActual."+ 30 days")); 
+    ?>
                                 <div class="form-group row">
-                                    <div class="col-sm-12">
-                                        <label>Documento del Coach </label>
-                                        <select name="document" class="form-control" id="exampleFirstName" required>
-                                            <option value="">Seleccione el nombre del coach...</option>
-                                            <?php
-                                            do {
-                                            ?>
-                                             <option value="<?php echo ($query1['documento']) ?>"> <?php echo ($query1['nom_completo'])?> </option> 
-                                            <?php
-                                             } while ($query1 = $control1->fetch());
-                                            ?>
-                                        </select>
-                                    </div>
+                                <div class="col-sm-6 mb-3 mb-sm-0"></br>
+                                            <label>Documento</label>
+                                            <h2 style="color: white;"><?php echo $_POST['doc_cli']?></h2>
+                                        </div>
+                                        <div class="col-sm-6 mb-3 mb-sm-0"></br>
+                                            <label>Nombre Completo</label>
+                                            <h2 style="color: white;"><?php echo $ho['nom_completo']?></h2>
+                                        </div>
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
@@ -193,7 +204,7 @@ $query1 = $control1->fetch();
                                 
                                 <input type="submit" class="btn btn-primary btn-block" name="Suscribir" style="margin-top:14px;">
                                 <br></br>
-                                <input type="hidden" name="validar_V" value="">
+                                <input type="hidden" name="validar_V" value="<?php echo $_POST['doc_cli']?>">
                             </form>
                             <hr>
                         </div>
@@ -218,7 +229,35 @@ $query1 = $control1->fetch();
 
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
+    <?php
+}
+else {
+    echo '<script>alert ("NO HAY NINGUN CLIENTE CON ESE NUMERO DE DOCUMENTO");</script>';
+    echo '<script>window.location="./datos.php"</script>';
+    }
+    }
+}
+else{
+        
+    ?>
+    <form class="user" method="post" name="user">
+        <div class="form-group row" >
+            <div class="col-sm-6 mb-3 mb-sm-0" id="div">
+                <label>Documento del cliente</label>
+                <input type="number"
+                        class="form-control" id="exampleFirstName" pattern="(?=.*\e)[0-9]{6,10}"
+                        maxlength="10" name="doc_cli" placeholder="Numero de documentos"
+                        oninput="maxlengthNumber(this);" title="Solo se aceptan numeros" required>
+            </div>
+            <div class="col-sm-6 mb-3 mb-sm-0">
+                <input type="hidden" name="docu"  value="">
+                <button type="submit"  name="consul" onclick="show();" class="btn btn-primary btn-user btn-block" >Consultar</button>
+            </div><br>
+            </form>
+            <?php
+            }
 
+?>
 </body>
 
 </html>
