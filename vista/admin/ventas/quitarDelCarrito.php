@@ -3,6 +3,7 @@ require_once("../../../base_datos/bd.php");
 $cone = new Database();
 $conex = $cone->conectar();
 session_start();
+include("../../../controller/validar.php");
 
 if(!isset($_GET["indice"])) return;
 $indice = $_GET["indice"];

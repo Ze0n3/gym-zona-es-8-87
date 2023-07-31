@@ -3,7 +3,8 @@ session_start();
 require_once("../../../base_datos/bd.php");
 $daba = new Database();
 $conex = $daba->conectar();
-
+session_start();
+include("../../../controller/validar.php");
 
 // PAGINACION
 
@@ -107,7 +108,7 @@ if ($total_paginas == 0) {
                         <?= $usu['usuario'] ?>
                     </td>
                     <td>
-                        <?= $usu['tipo_usuario'] ?>
+                        <?= $usu['nom_tip_user'] ?>
                     </td>
                     <td>
                         <?= $usu['genero'] ?>

@@ -2,6 +2,8 @@
 session_start();
 require_once("../../../base_datos/bd.php");
 $daba = new Database();
+include("../../../controller/validar.php");
+session_start();
 $conex = $daba->conectar();
 
 //creamos la consulta

@@ -2,6 +2,7 @@
 require_once("../../../base_datos/bd.php");
 $cone = new Database();
 $conex = $cone->conectar();
+include("../../controller/validar.php");
 ?>
 
 <?php

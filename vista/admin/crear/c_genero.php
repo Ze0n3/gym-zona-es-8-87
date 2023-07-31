@@ -2,6 +2,8 @@
 require_once("../../../base_datos/bd.php");
 $daba = new Database();
 $conex = $daba->conectar();
+session_start();
+include("../../../controller/validar.php");
 ?>
 
 <?php
@@ -63,7 +65,6 @@ $conex = $daba->conectar();
     </a><br>
 <form class="user" name="user" method="post">
     <div class="container">
-
         <div class="card o-hidden border-0 shadow-lg my-5">
             <div class="card-body p-0">
                 <!-- Nested Row within Card Body -->

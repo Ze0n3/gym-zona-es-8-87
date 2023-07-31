@@ -1,9 +1,9 @@
 <?php
 session_start();
-
-require_once("../../../base_datos/bd.php");
+include("../../../controller/validar.php");
 $daba = new Database();
 $conex = $daba->conectar();
+session_start();
 //creamos la consulta
 $SQL = $conex->prepare ("SELECT * FROM tip_servicio" );
 $SQL -> execute();
@@ -38,7 +38,6 @@ echo "<center>".'Lista Vacia'."</center>";
 
 echo "<center><a href='tabla_tip_servicio.php?pagina=1'>" . "<i class='fa fa-arrow-left'></i>" . "</a>";
 ?>
-?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -57,10 +56,11 @@ echo "<center><a href='tabla_tip_servicio.php?pagina=1'>" . "<i class='fa fa-arr
 </head>
 
 <body>
-    <a class="btn btn success" href="../index.php" style="margin-left: -45%; margin-top:3%; position:absolute;">  
-    <i class="bi bi-chevron-left" style="padding:10px 14px 10px 10px; color:#fff; font-size:15px; background-color:#0d6efd; border-radius:10px;"> REGRESAR</i>
+<a class="btn btn success" href="../index.php" style="margin-left: -45%; margin-top:3%; position:absolute;">
+        <i class="bi bi-chevron-left"
+            style="padding:10px 14px 10px 10px; color:#fff; font-size:15px; background-color:#0d6efd; border-radius:10px;">
+            REGRESAR</i>
     </a>
-
     <br>
     <a class="btn btn success" style="margin-left: 90%; margin-top:0%;" href="../excel/excel_servicio.php">  
     <i class="bi bi-file-earmark-excel" style="padding:10px 10px 10px 10px; border-radius:10px; color:#fff; font-size:15px; background-color:#198754;">EXCEL</i>

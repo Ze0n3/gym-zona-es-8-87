@@ -3,7 +3,7 @@ require_once("../../../base_datos/bd.php");
 $cone = new Database();
 $conex = $cone->conectar();
 session_start();
-
+include("../../../controller/validar.php");
 ?>
 
 <?php
@@ -120,7 +120,7 @@ $hora = date(" H:i:s");
 
                         <div class="col-sm-4 mb-0 mb-sm-0">
                             <label for="codigo">Código de barras o Nombre del producto:</label>
-                            <input autocomplete="off" autofocus class="form-control" pattern="[A-Za-z]"  title="Solo se pueden ingresar letras" maxlength="15" name="codigo" type="text" id="codigo" placeholder="Ingrese sobre el producto" required>
+                            <input autocomplete="off" autofocus class="form-control" title="" maxlength="15" name="codigo" type="text" id="codigo" placeholder="Ingrese sobre el producto" required>
                         </div>
                         <div class="col-sm-4 mb-0 mb-sm-0">
                         <button type="submit"  name="consul" class="btn btn-primary  btn-block">Consultar</button>

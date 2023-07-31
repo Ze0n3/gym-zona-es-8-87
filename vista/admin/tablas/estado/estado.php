@@ -3,6 +3,8 @@ session_start();
 require_once("../../../../base_datos/bd.php");
 $daba = new Database();
 $conex = $daba->conectar();
+session_start();
+include("../../../../controller/validar.php");
 
 if (isset($_POST['ActivoCL'])){
     $docu = $_POST['ActivoCL'];

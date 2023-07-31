@@ -49,6 +49,8 @@
 require_once("../../../base_datos/bd.php");
 $daba = new Database();
 $conex = $daba->conectar();
+session_start();
+include("../../../controller/validar.php");
 
 $control2 = $conex->prepare("SELECT * From usuarios WHERE tipo_usuario = 3");
 $control2->execute();

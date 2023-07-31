@@ -1,33 +1,3 @@
-<?php
-require_once("../../../base_datos/bd.php");
-$cone = new Database();
-$conex = $cone->conectar();
-session_start();
-include("../../../controller/validar.php");
-?>
-
-
-<?php
- if (isset($_POST["validar_V"])) {
-    
-        $nombre = $_POST['nom'];
-        $valor = $_POST['total'];
-
-        if ($nombre == "" || $valor == "") {
-        
-            echo '<script>alert ("EXISTEN DATOS VACIOS");</script>';
-            echo '<script>window.location="t_sus.php"</script>';
-    
-        }
-        else{
-        $insertsql2 = $conex->prepare ("INSERT INTO tip_servicio(servicio,precio) VALUES ('$nombre','$valor')");
-        $insertsql2->execute();
-        echo '<script>alert ("Registro Exitoso, Gracias");</script>';
-        echo '<script>window.location="t_sus.php"</script>';
-        }
-    }
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -39,7 +9,7 @@ include("../../../controller/validar.php");
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Servicios</title>
+    <title>AGREGAR CANTIDAD PRODUCTOS</title>
 
     <link href="../../../img/logo_gym.png"  rel="icon">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
@@ -63,7 +33,7 @@ include("../../../controller/validar.php");
             style="padding:10px 14px 10px 10px; color:#fff; font-size:15px; background-color:#0d6efd; border-radius:10px;">
             REGRESAR</i>
     </a><br>
-    <form class="user" name="user" method="post" autocomplete="off">
+    <form class="user" name="user" method="get" autocomplete="off">
     <div class="container">
         <div class="card o-hidden border-0 shadow-lg my-5">
             <div class="card-body p-0">
@@ -71,23 +41,112 @@ include("../../../controller/validar.php");
                 <div class="row">
                     <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
                     <div class="col-lg-7">
-                        <div class="p-5" style="margin-top:80px;">
+
+<?php
+require_once("../../../base_datos/bd.php");
+$cone = new Database();
+$conex = $cone->conectar();
+session_start();
+include("../../../controller/validar.php");
+?>
+
+
+<?php
+if (isset($_GET['consul'])){
+    $codigo = $_GET["codigo"];
+
+    $statement = $conex->prepare("SELECT * FROM productos WHERE id_producto = '$codigo' or nom_producto LIKE '%$codigo%'");
+    $statement->execute();
+    $resultados = $statement->fetchAll();
+
+    if ($codigo == ""){
+        ?>
+        <div class="alert alert-warning">
+                <strong>Error:</strong> Ingrese el codigo o nombre del producto
+            </div>
+        <?php
+    }
+    
+elseif($resultados){
+
+?>
+<table class="table table-bordered">
+<thead>
+    <tr>
+        <th>ID</th>
+        <th>Código</th>
+        <th>Nombre del Producto</th>
+        <th>Existencia</th>
+        <th>Cantidad Agregar</th>
+        <th>Agregar</th>
+    </tr>
+</thead>
+<tbody>
+    <?php
+    foreach($resultados as $pro){ 
+            
+        ?>
+    <tr>
+        <td><?= $pro['id_producto'] ?></td>
+        <td><?= $pro['cod_producto'] ?></td>
+        <td><?= $pro['nom_producto'] ?></td>
+        <td><?= $pro['can_inicial']?></td>
+        <td><?= $_GET['cantidad']?></td>
+        <td><a class="btn btn-success" name="agregar" href='agregarAlCarrito.php?id=<?php echo $pro['id_producto']?>&canti=<?php echo $canti?>'><i class="bi bi-cart-check-fill"></i></a></td>
+    </tr>
+    <br>
+    <?php 
+    }
+} 
+ elseif (isset($_GET["enviar"])) {
+    
+        $nombre = $_GET['nom'];
+        $valor = $_GET['total'];
+
+        if ($nombre == "" || $valor == "") {
+        
+            echo '<script>alert ("EXISTEN DATOS VACIOS");</script>';
+            echo '<script>window.location="agregarpro.php"</script>';
+    
+        }
+        else{
+        $insertsql2 = $conex->prepare ("INSERT INTO tip_servicio(servicio,precio) VALUES ('$nombre','$valor')");
+        $insertsql2->execute();
+        echo '<script>alert ("Registro Exitoso, Gracias");</script>';
+        echo '<script>window.location="agregarpro.php"</script>';
+        }
+    }
+            else{ 
+                ?>
+                <div class="alert alert-warning">
+                        <strong>Error:</strong> El producto que buscas no existe
+                    </div>
+                <?php
+            }
+        }
+        else{
+            ?>
+            <div class="p-5" style="margin-top:80px;">
                             <div class="text-center">
-                                <h1 class="h4 text-gray-900 mb-4">Tipo de Servicio</h1>
+                                <h1 class="h4 text-gray-900 mb-4">AGREGAR CANTIDAD DE PRODUCTOS</h1>
                             </div>
                                 <div class="form-group row">
-                                    <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <label class="label">Nombre de servicio</label>
-                                        <input type="text" class="form-control" title="Solo se pueden ingresar letras" maxlength="50" name="nom"
-                                            placeholder="Nombre de servicio" >
+                                    <div class="col-sm-8 mb-0 mb-sm-0"><br>
+                                        <label for="codigo">Código de barras o Nombre del producto:</label>
+                                        <input autocomplete="off" autofocus class="form-control"  title="" maxlength="15" name="codigo" type="text" id="codigo" placeholder="Ingrese sobre el producto" required>
                                     </div>
-                                    <div class="col-sm-6">
-                                        <label>Precio de servicio por dia </label>
-                                        <input type="number" class="form-control" id="exampleFirstName" min="0" pattern="(?=.*\e){6,7}" title="No se admite un valor de menos de 6 dijitos"   oninput="maxlengthNumber(this);" maxlength="6"  name="total"
-                                            placeholder="Precio de servicio" required>
+                                    <div class="col-sm-8 mb-0 mb-sm-0"><br>
+                                        <label for="codigo">Cantidad A Sumar:</label>
+                                        <input autocomplete="off" autofocus class="form-control"  title="" maxlength="15" name="cantidad" type="text" id="codigo" placeholder="Ingrese sobre el producto" required>
                                     </div>
-                                </div>
-
+                                    <div class="col-sm-6 mb-0 mb-sm-0"><br>
+                                        <input type="submit" class="btn btn-primary btn-block" name="consul">
+                                        <input type="hidden" name="consul">
+                                    </div>
+                            </div>
+        <?php
+        }
+                    ?>
                                 <!-- SOLO LETRA (ESPACIO DE LETRAS SE HACE EN LETRAS) -->
                                 <script>
                                     function sololetras(e) {
@@ -133,10 +192,6 @@ include("../../../controller/validar.php");
                                         });
 
                                         </script>
-
-                                
-                                <input type="submit" class="btn btn-primary btn-block" name="enviar">
-                                <input type="hidden" name="validar_V" value="user">
                             </form>
                             <hr>
                         </div>

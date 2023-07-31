@@ -1,8 +1,8 @@
 <?php
 session_start();
-
-require_once("../../../base_datos/bd.php");
+include("../../../controller/validar.php");
 $daba = new Database();
+session_start();
 $conex = $daba->conectar();
 //creamos la consulta
 $SQL = $conex->prepare ("SELECT * FROM venta_serv");

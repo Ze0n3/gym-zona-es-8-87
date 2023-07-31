@@ -105,6 +105,8 @@ $fila = $info -> fetch();
                     data-parent="#accordionSidebar">
                     <form action="" method="get">
                         <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">Agregar</h6>
+                            <a class="collapse-item" href="crear/agregarpro.php">Agregar Cantidad</a>
                             <h6 class="collapse-header">Crear</h6>
                             <a class="collapse-item" href="crear/registrocli.php">Clientes</a>                
                             <a class="collapse-item" href="crear/registrocoa.php">Coachs</a>

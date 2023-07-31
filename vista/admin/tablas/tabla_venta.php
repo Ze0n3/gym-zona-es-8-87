@@ -1,9 +1,9 @@
 <?php
 session_start();
-
-require_once("../../../base_datos/bd.php");
+include("../../../controller/validar.php");
 $daba = new Database();
 $conex = $daba->conectar();
+session_start();
 //creamos la consulta
 
 

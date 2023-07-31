@@ -50,6 +50,7 @@
 require_once("../../../base_datos/bd.php");
 $daba = new Database();
 $conex = $daba->conectar();
+include("../../../controller/validar.php");
 ?>
 
 

@@ -3,7 +3,7 @@ session_start();
 require_once("../../../base_datos/bd.php");
 $daba = new Database();
 $conex = $daba->conectar();
-
+include("../../../controller/validar.php");
 
 
 // PAGINACION
@@ -85,9 +85,7 @@ if ($total_paginas == 0) {
                     <th>Nombre Completo</th>
                     <th>Tipo Usuario</th>
                     <th>Genero</th>
-                    <th>Estado</th>
                     <th colspan="2">Accion</th>
-                    <th colspan="2">Cambiar estado</th>
                 </tr>
             </thead>
 
@@ -105,14 +103,10 @@ if ($total_paginas == 0) {
                         <?= $usu['nom_completo'] ?>
                     </td>
                     <td>
-                        <?= $usu['tipo_usuario'] ?>
+                        <?= $usu['nom_tip_user'] ?>
                     </td>
                     <td>
                         <?= $usu['genero'] ?>
-                    </td>
-
-                    <td>
-                        <?= $usu['estado'] ?>
                     </td>
 
 
@@ -130,18 +124,6 @@ if ($total_paginas == 0) {
                         <form method="GET" action="../actualizar/actualizar_clien.php">
                             <input type="hidden" name="editar" value="<?= $usu['documento'] ?>">
                             <button type="submit">Editar</button>
-                        </form>
-                    </td>
-                    <td>
-                        <form method="post" action="estado/estado.php">
-                            <input type="hidden" name="ActivoCL" value="<?= $usu['documento'] ?>">
-                            <button type="submit">Activo</button>
-                        </form>
-                    </td>
-                    <td>
-                        <form method="post" action="estado/estado.php">
-                            <input type="hidden" name="InactivoCL" value="<?= $usu['documento'] ?>">
-                            <button type="submit">Inactivo</button>
                         </form>
                     </td>
                 </tr>

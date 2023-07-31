@@ -2,11 +2,9 @@
 require_once("../../../base_datos/bd.php");
 $cone = new Database();
 $conex = $cone->conectar();
+session_start();
+include("../../../controller/validar.php");
 ?>
-
-<?php
-?>
-
 
 <?php
      if (isset($_POST["validar_V"])) {

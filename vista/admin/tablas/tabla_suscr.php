@@ -1,9 +1,10 @@
 <?php
 session_start();
-
-require_once("../../../base_datos/bd.php");
+include("../../../controller/validar.php");
 $daba = new Database();
+session_start();
 $conex = $daba->conectar();
+
 
 
 $por_pagina = 5;
@@ -34,9 +35,6 @@ echo "<center>".'Lista Vacia'."</center>";
 
 echo "<center><a href='tabla_suscr.php?pagina=1'>" . "<i class='fa fa-arrow-left'></i>" . "</a>";
 ?>
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
