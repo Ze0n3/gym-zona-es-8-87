@@ -2,32 +2,17 @@
 require_once("../../../base_datos/bd.php");
 $daba = new Database();
 $conex = $daba->conectar();
-?>
-
-<?php
+session_start();
+include("../../../controller/validar.php");
 
 $control = $conex->prepare("SELECT * From tip_user WHERE id_tip_user ");
 $control->execute();
 $query = $control->fetch();
 
-?>
-
-<?php
-
 $control1 = $conex->prepare("SELECT * From genero");
 $control1->execute();
 $query1 = $control1->fetch();
 
-?>
-<?php
-
-// $control2 = $conex->prepare("SELECT * From estado WHERE id_estado = 2");
-// $control2->execute();
-// $query2 = $control2->fetch();
-
-?>
-
-<?php
 if (isset($_POST["validar_V"]) == "cli") {
     $cedula = $_POST['documento'];
     $nombre = $_POST['nombre'];
@@ -36,7 +21,7 @@ if (isset($_POST["validar_V"]) == "cli") {
     $direccion = $_POST['direccion'];
     $correo = $_POST['correo'];
     $fecha_n = $_POST['nacimiento'];
-
+    
     $fecha_nacimiento = $fecha_n;
     $dia_actual = date("Y-m-d");
     $edad_diff = date_diff(date_create($fecha_nacimiento), date_create($dia_actual));
@@ -46,7 +31,7 @@ if (isset($_POST["validar_V"]) == "cli") {
     $validar->execute();
     $queryi = $validar->fetch();
 
-    if ($cedula == "" || $nombre == "" || $edad == "" || $genero == "" || $telefono == "" || $direccion == "" || $correo == "" || $fecha_n == "") {
+    if ($cedula == "" || $nombre == "" || $genero == "" || $telefono == "" || $direccion == "" || $correo == "" || $fecha_n == "") {
 
         echo '<script>alert ("EXISTEN DATOS VACIOS");</script>';
         echo '<script>window.location="registrocli.php"</script>';
@@ -88,14 +73,17 @@ if (isset($_POST["validar_V"]) == "cli") {
     <!-- Custom styles for this template-->
     <link href="../../../css/sb-admin-2.min.css" rel="stylesheet">
 
+    <!-- direccion para que funcione solo numero -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
 </head>
 
 <body class="bg-gradient-primary">
-    <a class="btn btn success" href="../index.php" style="margin-left: 3.6%; margin-top:3%; position:absolute;">
+<a class="btn btn success" href="../index.php" style="margin-left: 3.6%; margin-top:3%; position:absolute;">
         <i class="bi bi-chevron-left"
             style="padding:10px 14px 10px 10px; color:#fff; font-size:15px; background-color:#0d6efd; border-radius:10px;">
             REGRESAR</i>
-    </a><br><br><br>
+    </a><br>
     <form method="post" autocomplete="off" name="cli">
         <div class="container">
             <div class="card o-hidden border-0 shadow-lg my-6">
@@ -108,23 +96,26 @@ if (isset($_POST["validar_V"]) == "cli") {
                                 <div class="text-center">
                                     <h1 class="h4 text-gray-900 mb-4">Crear Clientes</h1>
                                 </div>
-                                <form class="user">
                                     <div class="form-group row">
-                                        <div class="col-sm-4 mb-3 mb-sm-2"><br>
-                                        <label>Documento</label>
-                                            <input type="number" class="form-control form-control-user"
-                                                id="exampleFirstName" maxlength="10" name="documento"
-                                                placeholder="Numero de documento" oninput="maxlengthNumber(this);">
+                                        <div class="col-sm-4 mb-3 mb-sm-2">
+                                            <label>Documento</label>
+                                            <input type="number" style="margin:0px;"
+                                                class="form-control form-control-user" id="exampleFirstName" pattern="(?=.*\e)[0-9]{6,10}"
+                                                maxlength="10" name="documento"  min="90000000" placeholder="Numero de documento"
+                                                oninput="maxlengthNumber(this);" title="Solo se aceptan numeros" required>
+
                                         </div>
-                                        <div class="col-sm-4 mb-3 mb-sm-2"><br>
-                                        <label>Nombre completo</label>
+                                        <div class="col-sm-4 mb-3 mb-sm-2">
+                                            <label>Nombre completo</label>
                                             <input type="text" class="form-control form-control-user"
-                                                id="exampleLastName" maxlength="50" oninput="validarletras(this);" onkeypress="return(sololetras(event));" name="nombre" placeholder="Nombre completo">
+                                                id="exampleLastName" maxlength="45"  oninput="validarletras(this);"
+                                                onkeypress="return(sololetras(event));" name="nombre"  pattern="[A-Za-z].{20,45}" title="Solo se aceptan letras"
+                                                placeholder="Nombre completo" required>
                                         </div>
-                                        <div class="col-sm-4"><br>
-                                        <label>Genero</label>
+                                        <div class="col-sm-4">
+                                            <label>Genero</label>
                                             <select name="genero" class="form-control form-control-user"
-                                                id="exampleFirstName">
+                                                id="exampleFirstName" required>
                                                 <option value="">Genero</option>
                                                 <?php
                                                 do {
@@ -135,32 +126,34 @@ if (isset($_POST["validar_V"]) == "cli") {
                                                 ?>
                                             </select>
                                         </div>
-                                        <div class="col-sm-4"><br>
-                                        <label>Estatura</label>
-                                            <input type="number" class="form-control form-control-user"
-                                                id="exampleFirstName" name="estatura" maxlength="4"
-                                                oninput="maxlengthNumber(this);" placeholder="Estatura">
-                                        </div>
-                                        <div class="col-sm-4"><br>
-                                        <label>Telefono</label>
-                                            <input type="number" class="form-control form-control-user"
-                                                id="exampleLastName" name="telefono" maxlength="10"
-                                                oninput="maxlengthNumber(this);" placeholder="Telefono">
-                                        </div>
-                                        <div class="col-sm-4 mb-3 mb-sm-0"><br>
-                                        <label>Direccion</label>
+                                        <div class="col-sm-4">
+                                            <label>Estatura</label>
                                             <input type="text" class="form-control form-control-user"
-                                                id="exampleFirstName" name="direccion" maxlength="50" placeholder="Direccion">
+                                                id="exampleFirstName" name="estatura" maxlength="4" pattern=".{4,.}" title="Solo se aceptan 3 numeros y un punto"
+                                                oninput="maxlengthNumber(this);" onkeypress="return(solonumeros(event));" placeholder="Estatura" required>
                                         </div>
-                                        <div class="col-sm-4 mb-3 mb-sm-0"><br>
-                                        <label>Correo electronico</label>
+                                        <div class="col-sm-4 mb-3 mb-sm-0">
+                                            <label>Telefono</label>
+                                            <input type="number" class="form-control form-control-user"
+                                                id="exampleLastName" name="telefono" min="3000000000" maxlength="10" pattern=".{10}" title="Solo se aceptan numeros" 
+                                                oninput="maxlengthNumber(this);" placeholder="Telefono" required>
+                                        </div>
+                                        <div class="col-sm-4 mb-3 mb-sm-0">
+                                            <label>Direccion</label>
                                             <input type="text" class="form-control form-control-user"
-                                                id="exampleLastName" name="correo" maxlength="35" placeholder="Correo electronico">
+                                                id="exampleFirstName" name="direccion" maxlength="50"
+                                                placeholder="Direccion" required>
                                         </div>
-                                        <div class="col-sm-4 mb-3 mb-sm-0"><br>
+                                        <div class="col-sm-4 mb-3 mb-sm-0">
+                                            <label>Correo electronico</label>
+                                            <input type="email" class="form-control form-control-user"
+                                                id="exampleLastName" name="correo" maxlength="35" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                                                placeholder="Correo electronico" required>
+                                        </div>
+                                        <div class="col-sm-4" style="height:70px;">
                                             <label>Fecha de nacimiento</label>
                                             <input type="date" class="form-control form-control-user"
-                                                id="exampleLastName" name="nacimiento">
+                                                id="fecha" name="nacimiento" required>
                                             <br>
                                         </div>
 
@@ -212,10 +205,50 @@ if (isset($_POST["validar_V"]) == "cli") {
                                             }
                                         </script>
 
-                                        <input type="submit" class="btn btn-primary btn-user btn-block"
-                                            name="Suscribir">
+                                        <!-- SOLO NUMEROS () -->
+                                        <script>
+                                            function solonumeros(e) {
+                                                key = e.keyCode || e.which;
+
+                                                teclado = String.fromCharCode(key).toLowerCase();
+
+                                                letras = "0123456789.";
+
+                                                especiales = "8-37-38-46-164-46";
+
+                                                teclado_especial = false;
+
+                                                for (var i in especiales) {
+                                                    if (key == especiales[i]) {
+                                                        teclado_especial = true;
+                                                        break;
+                                                    }
+                                                }
+
+                                                if (letras.indexOf(teclado) == -1 && !teclado_especial) {
+                                                    return false;
+                                                    a
+                                                }
+                                            }
+                                        </script>
+
+                                        <!-- SOLO NUMERO -->
+                                        <script>
+                                            $(function() {
+                                            $('input[type=number]').keypress(function(key) {
+                                                if(key.charCode < 48 || key.charCode > 57) return false;
+                                            });
+                                        });
+
+                                        </script>
+
+
+
+
+                                        <input type="submit" style="margin-top:10px;"
+                                            class="btn btn-primary btn-user btn-block" name="Suscribir">
                                         <input type="hidden" name="validar_V" value="user">
-                                </form>
+                              
                                 <hr>
                             </div>
                         </div>
@@ -225,6 +258,24 @@ if (isset($_POST["validar_V"]) == "cli") {
 
         </div>
     </form>
+
+    <script>
+        // FUNCION DE JAVASCRIPT PARA VALIDAR LOS AÑOS DE RANGO PARA LA FECHA DE NACIMIENTO
+        var fechaInput = document.getElementById('fecha');
+        // Calcular las fechas mínima y máxima permitidas
+        var fechaMaxima = new Date();
+        fechaMaxima.setFullYear(fechaMaxima.getFullYear() - 14); // Restar 18 años para que la persona se registre 
+        var fechaMinima = new Date();
+        fechaMinima.setFullYear(fechaMinima.getFullYear() - 60); // Restar 80 años
+        // Formatear las fechas mínima y máxima en formato de fecha adecuado (YYYY-MM-DD)
+        var fechaMaximaFormateada = fechaMaxima.toISOString().split('T')[0];
+        var fechaMinimaFormateada = fechaMinima.toISOString().split('T')[0];
+
+        // Establecer los atributos min y max del campo de entrada de fecha
+        fechaInput.setAttribute('min', fechaMinimaFormateada);
+        fechaInput.setAttribute('max', fechaMaximaFormateada);
+    </script>
+    
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

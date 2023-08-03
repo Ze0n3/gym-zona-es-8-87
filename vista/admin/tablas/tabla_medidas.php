@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 require_once("../../../base_datos/bd.php");
 $daba = new Database();
 $conex = $daba->conectar();

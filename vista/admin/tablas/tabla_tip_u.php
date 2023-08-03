@@ -75,10 +75,7 @@ echo "<center><a href='tabla_tip_u.php?pagina=1'>" . "<i class='fa fa-arrow-left
         <!--El th se crea la cabecera-->
         <thead>
             <tr>
-
-                <th>Id tipo de usuario</th>
                 <th>Tipo de usuario</th>
-                <!-- <th>Edad</th> -->
                 <th colspan="2">ACCION</th>
 
             </tr>
@@ -88,20 +85,8 @@ echo "<center><a href='tabla_tip_u.php?pagina=1'>" . "<i class='fa fa-arrow-left
         foreach ($resultado1 as $usu) {
             //se abre el ciclo con la llave
         ?>
-            <!--El td sirve para sirve para crear las columnas-->
-            <!--En cada td se va a mostrar los datos de una tabla usando variables por ejemplo: $variable['nombre del campo de la tabla que queremos que se vea']-->
-            <tr>
-            
-
-                <td><?= $usu['id_tip_user'] ?></td>    
+            <tr>   
                 <td><?= $usu['nom_tip_user'] ?></td>
-                
-
-            
-                
-
-                <!--con este metodo GET vamos a poder ver la informacion que estamos enviando-->
-
                 <td>
                     <form method="GET" action="../eliminar/eliminar_tip_u.php" >
                         <input type="hidden" name="elimin" value="<?= $usu['id_tip_user'] ?>">

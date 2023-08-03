@@ -1,15 +1,39 @@
 <?php
 session_start();
-
 require_once("../../../base_datos/bd.php");
 $daba = new Database();
 $conex = $daba->conectar();
-//creamos la consulta
-$SQL = $conex->prepare ("SELECT * FROM suscripcion where doc_coach= '".$_SESSION['docu']."' " );
-$SQL -> execute();
-$resul=$SQL->fetchAll();
+include("../../../controller/validar.php");
+
+$docu = $_SESSION['docu'];
+
+$por_pagina = 5;
+if(isset($_GET['pagina'])){
+$pagina = $_GET['pagina'];
+}
+else
+{
+$pagina = 1;
+}
+$empieza = ($pagina - 1) * $por_pagina;
+$sql1 = $conex->prepare("SELECT (SELECT nom_completo FROM usuarios WHERE documento = suscripcion.doc_coach) AS nombre_coach, id_suscripcion, suscripcion.doc_cliente, suscripcion.fecha_ini, suscripcion.fecha_venc, suscripcion.precio  ,usuarios.nom_completo FROM suscripcion INNER JOIN usuarios ON usuarios.documento = suscripcion.doc_cliente AND suscripcion.doc_coach WHERE suscripcion.doc_coach = '$docu' ORDER BY id_suscripcion LIMIT $empieza, $por_pagina");
+$sql1->execute();
+$resultado1 = $sql1->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
+<?php
+$sql = $conex->prepare("SELECT COUNT(*) FROM suscripcion  ORDER BY id_suscripcion");
+$sql->execute();
+$resul = $sql->fetchColumn();
+$total_paginas = ceil($resul / $por_pagina);
+if ($total_paginas == 0)
+{
+echo "<center>".'Lista Vacia'."</center>";
+} else
+
+echo "<center><a href='tabla_suscr.php?pagina=1'>" . "<i class='fa fa-arrow-left'></i>" . "</a>";
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -27,7 +51,7 @@ $resul=$SQL->fetchAll();
 </head>
 
 <body>
-    <a class="btn btn success" href="../index.php" style="margin-left: 3.6%; margin-top:3%; position:absolute;">  
+<a class="btn btn success" href="../index.php" style="margin-left: 3.6%; margin-top:3%; position:absolute;">  
     <i class="bi bi-chevron-left" style="padding:10px 14px 10px 10px; color:#fff; font-size:15px; background-color:#0d6efd; border-radius:10px;"> REGRESAR</i>
     </a>
 
@@ -46,7 +70,7 @@ $resul=$SQL->fetchAll();
         <!--El th se crea la cabecera-->
         <thead>
             <tr>
-               
+
                 <th>Id de suscripcion</th>
                 <th>Documento del cliente</th>
                 <th>Documento del Coach</th>
@@ -54,45 +78,40 @@ $resul=$SQL->fetchAll();
                 <th>Fecha de vencimiento</th>
                 <th>Precio</th>
                 <!-- <th>Edad</th> -->
-                <th colspan="2">ACCION</th>
-               
-            </tr>
+                <th colspan="1">ACCION</th>
+
+            </tr>   
         </thead>
 
         <?php
-        foreach ($resul as $usu) {
+        foreach ($resultado1 as $usu) {
             //se abre el ciclo con la llave
         ?>
             <!--El td sirve para sirve para crear las columnas-->
             <!--En cada td se va a mostrar los datos de una tabla usando variables por ejemplo: $variable['nombre del campo de la tabla que queremos que se vea']-->
             <tr>
             
-                 
+
                 <td><?= $usu['id_suscripcion'] ?></td>    
-                <td><?= $usu['doc_cliente'] ?></td>
-                <td><?= $usu['doc_coach'] ?></td>
+                <td><?= $usu['nom_completo'] ?></td>
+                <td><?= $usu['nombre_coach'] ?></td>
                 <td><?= $usu['fecha_ini'] ?></td>
                 <td><?= $usu['fecha_venc'] ?></td>
                 <td><?= $usu['precio'] ?></td>
                 
 
-           
+            
                 
 
                 <!--con este metodo GET vamos a poder ver la informacion que estamos enviando-->
 
                 <td>
                     <form method="GET" action="../eliminar/eliminar_sus.php" >
-                        <input type="hidden" name="elimin" value="<?= $usu['id_producto'] ?>">
+                        <input type="hidden" name="elimin" value="<?= $usu['id_suscripcion'] ?>">
                         <button type="submit" onclick="return confirm('¿Esta seguro de eliminar este usuario?');">Eliminar</button>
                     </form>
                 </td>
-                <td>
-                    <form method=" GET" action="#" >
-                        <input type="hidden" name="editar" value="<?= $usu['id_producto'] ?>">
-                        <button type="submit">Editar</button>
-                    </form>
-                </td>
+                
                 
             </tr>
 
@@ -100,7 +119,17 @@ $resul=$SQL->fetchAll();
         } //se cierra el recorrido cerrando la llave
         ?>
     </table>
-
+        |<div class="text-center" role="toolbar" aria-label="Toolbar with button groups">
+                <div class="btn-group me-2" role="group" aria-label="First group" aling>
+                    <?php
+                    for ($i = 1; $i <= $total_paginas; $i++) {
+                        echo "<a class='btn btn-primary'  href='tabla_suscr.php?pagina=" . $i . "'> " . $i . " </a>";
+                    }
+                    echo "<a href='tabla_suscr.php?pagina=$total_paginas'>" . "<i class='fa fa-arrow-right'></i>"
+                        . "</a></center>";
+                    ?>
+                </div>
+            </div>
 
 </body>
 

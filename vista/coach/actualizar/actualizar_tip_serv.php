@@ -2,6 +2,7 @@
 require_once("../../../base_datos/bd.php");
 $cone = new Database();
 $conex = $cone->conectar();
+include("../../controller/validar.php");
 ?>
 
 <?php
@@ -62,7 +63,7 @@ $query = $control->fetch();
 
     <title>Actualizar servicio</title>
 
-    <link href="../../../img/logo_gym.png" rel="icon">
+    <link href="../../../img1/logo9.png" rel="icon">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 
     <!-- Custom fonts for this template-->

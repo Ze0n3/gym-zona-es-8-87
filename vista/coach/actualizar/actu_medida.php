@@ -2,9 +2,9 @@
 require_once("../../../base_datos/bd.php");
 $daba = new Database();
 $conex = $daba->conectar();
-?>
+session_start();
+include("../../../controller/validar.php");
 
-<?php
 $editar = $_GET['editar'];
 
 $con = $conex->prepare("SELECT * FROM medidas INNER JOIN usuarios ON medidas.doc_cliente = usuarios.documento WHERE doc_cliente='$editar'");
@@ -61,7 +61,7 @@ $fila = $con-> fetch();
 
     <title>Actualizacion Medidas</title>
 
-    <link href="../../../img/logo_gym.png" rel="icon">
+    <link href="../../../img1/logo9.png" rel="icon">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 
     <!-- Custom fonts for this template-->

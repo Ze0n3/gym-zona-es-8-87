@@ -4,13 +4,13 @@
     require_once("../../../base_datos/bd.php");
     $cone = new Database();
     $conex = $cone->conectar();
-    $elimi = $_GET['elimin'];
+    $eli = $_GET['elimin'];
 
-    $delete = $conex->prepare("DELETE FROM tip_servicio WHERE id_tip_serv= '$elimi ' ");
-    $delete->execute();
-    $eliminar = $delete->fetch();
+    $elimm = $conex->prepare("DELETE FROM tip_servicio WHERE id_tip_serv= '$eli' ");
+    $elimm->execute();
+    $borrar = $elimm->fetch();
 
-    if(!$eliminar){
+    if(!$borrar){
         echo'<script> alert ("//SE ELIMINARON CORRECTAMENTE LOS DATOS//");</script>';
         echo'<script> window.location="../tablas/tabla_tip_servicio.php"</script>';
 

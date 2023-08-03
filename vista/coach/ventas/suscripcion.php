@@ -57,14 +57,18 @@ include("../../../controller/validar.php");
     <!-- Custom styles for this template-->
     <link href="../../../css/sb-admin-2.min.css" rel="stylesheet">
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
 </head>
 
 <body class="bg-gradient-primary">
-<a class="btn btn success" href="../index.php" style="margin-left: 3.6%; margin-top:0%; position:absolute;">  
-    <i class="bi bi-chevron-left" style="padding:10px 14px 10px 10px; color:#fff; font-size:15px; background-color:#0d6efd; border-radius:10px;"> REGRESAR</i>
-    </a>
+<a class="btn btn success" href="../index.php" style="margin-left: 3.6%; margin-top:3%; position:absolute;">
+        <i class="bi bi-chevron-left"
+            style="padding:10px 14px 10px 10px; color:#fff; font-size:15px; background-color:#0d6efd; border-radius:10px;">
+            REGRESAR</i>
+    </a><br>
+    <form class="user" method="post" name="user">
     <div class="container">
-
         <div class="card o-hidden border-0 shadow-lg my-5">
             <div class="card-body p-0">
                 <!-- Nested Row within Card Body -->
@@ -73,16 +77,20 @@ include("../../../controller/validar.php");
                     <div class="col-lg-8">
                         <div class="p-5">
                             <div class="text-center">
-                                <h1 class="h4 text-gray-900 mb-4">Suscripciones </h1>
+                                <h1 class="h4 text-gray-900 mb-4">Suscripciones</h1>
                             </div>
-                            <form class="user" method="post" name="user">
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                         <label>Documento del cliente</label>
-                                        <input type="number" class="form-control " id="exampleFirstName" name="doc_cli" >
+                                        <input type="number"
+                                                class="form-control" id="exampleFirstName" pattern="(?=.*\e)[0-9]{6,10}"
+                                                maxlength="10" name="doc_cli" placeholder="Numero de documentos"
+                                                oninput="maxlengthNumber(this);" title="Solo se aceptan numeros" required>
+
+                                        
                                     </div>
                                     <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input type="hidden" name="docu" >
+                                        <input type="hidden" name="docu">
                                         <button type="submit"  name="consul" class="btn btn-primary btn-user btn-block">Consultar</button>
                                     </div>
                                     <?php
@@ -100,9 +108,13 @@ include("../../../controller/validar.php");
 
                                         $cli = $_POST['doc_cli'];
 
+                                        $sus = $con->prepare("SELECT * FROM tip_servicio WHERE id_tip_serv = 1");
+                                        $sus ->execute();
+                                        $suscri = $sus->fetch();
+
                                         $consu = $con->prepare("SELECT * FROM usuarioS WHERE documento = '$cli' AND tipo_usuario = 3");
                                         $consu ->execute();
-                                        $ho = $consu->fetchAll();
+                                        $ho = $consu->fetch();
 
                                         if($ho){
                                             date_default_timezone_set('America/Bogota');
@@ -111,27 +123,44 @@ include("../../../controller/validar.php");
 
                                     ?>
                                     <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <label>Documento del cliente</label>
-                                        <h3><?php echo $cli ?></h3>
+                                        <label>Nombre del cliente</label>
+                                        <h3><?php echo $ho['nom_completo'] ?></h3>
                                     </div>
                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                         <label>Fecha de suscripcion</label>
-                                        <input type="text" class="form-control " id="exampleFirstName" name="s_fecha" value="<?php echo $fechaActual; ?>">
+                                        <h2 id="exampleFirstName" name="s_fecha" value="" required><?php echo $fechaActual; ?></h2>
                                     </div>
                                     <div class="col-sm-6">
                                         <label>Fecha de vencimiento</label>
-                                        <input type="text" class="form-control " id="exampleLastName" name="v_fecha" value="<?php echo $fin ?>" >
+                                        <h2  id="exampleLastName" name="v_fecha" value="" required ><?php echo $fin ?></h2>
                                     </div>
 
                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                         <label>Precio de la suscripcion</label>
-                                        <input type="number" class="form-control" id="exampleLastName" name="precio" value="">
+                                        <h2  id="exampleLastName" name="precio" value="" required><?php echo $suscri['precio'] ?></h2>
                                     </div>
                                 </div>
                                 
                                 <input type="hidden" name="docum" value="<?php echo $cli ?>">
                                 <button type="submit"  name="validar_V" class="btn btn-primary btn-user btn-block">INGRESAR</button>
                             </form>
+                                <script>
+                                    function maxlengthNumber(obj) {
+                                        console.log(obj.value);
+                                        if (obj.value.length > obj.maxLength) {
+                                            obj.value = obj.value.slice(0, obj.maxLength);
+                                        }
+                                    }
+                                </script>
+
+                                        <script>
+                                            $(function() {
+                                            $('input[type=number]').keypress(function(key) {
+                                                if(key.charCode < 48 || key.charCode > 57) return false;
+                                            });
+                                        });
+
+                                        </script>
                             <hr>
                         </div>
                     </div>

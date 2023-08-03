@@ -81,6 +81,8 @@ $fila = $info -> fetch();
                             <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
                         
                                     <nav class="sb-sidenav-menu-nested nav">
+                                        <h6 class="collapse-header">Agregar</h6>
+                                        <a class="collapse-item" href="crear/agregarpro.php">Agregar cantidad de producto</a> 
                                         <h6 class="collapse-header">Crear</h6>
                                         <a class="collapse-item" href="crear/registrocli.php">Clientes</a>                
                                         <a class="collapse-item" href="crear/datos.php">Datos</a>  

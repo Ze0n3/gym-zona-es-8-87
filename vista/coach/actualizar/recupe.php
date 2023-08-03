@@ -2,6 +2,7 @@
 require_once("../../../base_datos/bd.php");
 $daba = new database();
 $con = $daba ->conectar();
+include("../../controller/validar.php");
 session_start();
 
 if (isset($_POST["recucon"])){

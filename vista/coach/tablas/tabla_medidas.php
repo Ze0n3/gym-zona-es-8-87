@@ -1,14 +1,45 @@
 <?php
 session_start();
-
 require_once("../../../base_datos/bd.php");
 $daba = new Database();
 $conex = $daba->conectar();
+include("../../../controller/validar.php");
 //creamos la consulta
 $SQL = $conex->prepare ("SELECT * FROM medidas" );
 $SQL -> execute();
 $resul=$SQL->fetchAll();
+
+
+$por_pagina = 5;
+if(isset($_GET['pagina'])){
+$pagina = $_GET['pagina'];
+}
+else
+{
+$pagina = 1;
+}
+$empieza = ($pagina - 1) * $por_pagina;
+$sql1 = $conex->prepare("SELECT * FROM medidas INNER JOIN usuarios ON medidas.doc_cliente = usuarios.documento
+ORDER BY id_medidas LIMIT $empieza, $por_pagina");
+$sql1->execute();
+$resultado1 = $sql1->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
+
+<?php
+$sql = $conex->prepare("SELECT COUNT(*) FROM medidas  ORDER BY id_medidas");
+$sql->execute();
+$resul = $sql->fetchColumn();
+$total_paginas = ceil($resul / $por_pagina);
+if ($total_paginas == 0)
+{
+echo "<center>".'Lista Vacia'."</center>";
+} else
+
+echo "<center><a href='tabla_medidas.php?pagina=1'>" . "<i class='fa fa-arrow-left'></i>" . "</a>";
+?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -27,7 +58,7 @@ $resul=$SQL->fetchAll();
 </head>
 
 <body>
-    <a class="btn btn success" href="../index.php" style="margin-left: 3.6%; margin-top:3%; position:absolute;">  
+    <a class="btn btn success" href="../index.php" style="margin-left: -45%; margin-top:3%; position:absolute;">  
     <i class="bi bi-chevron-left" style="padding:10px 14px 10px 10px; color:#fff; font-size:15px; background-color:#0d6efd; border-radius:10px;"> REGRESAR</i>
     </a>
 
@@ -37,7 +68,7 @@ $resul=$SQL->fetchAll();
     </a>
     <br>
 
-    <a  class="btn btn success" href="../fehora.php" style="margin-left: 88%; margin-top:1%;">  
+    <a  class="btn btn success" href="../reporte/repor_medidas.php" style="margin-left: 88%; margin-top:1%;">  
     <i class="bi bi-printer" style="padding:10px 16px 10px 16px; border-radius:10px; color:#fff; font-size:15px; background-color:#E00000;">  IMPRIMIR</i>
     </a>
     <!--creamos la tabla-->
@@ -54,30 +85,25 @@ $resul=$SQL->fetchAll();
                 <th>Brazo_der</th>
                 <!-- <th>Edad</th> -->
                 <th colspan="2">ACCION</th>
-               
+            
             </tr>
         </thead>
 
         <?php
-        foreach ($resul as $usu) {
-            //se abre el ciclo con la llave
+        foreach ($resultado1 as $usu) {
+            
         ?>
-            <!--El td sirve para sirve para crear las columnas-->
-            <!--En cada td se va a mostrar los datos de una tabla usando variables por ejemplo: $variable['nombre del campo de la tabla que queremos que se vea']-->
+
+    
             <tr>
-               
-                <td><?= $usu['doc_cliente'] ?></td>    
+            
+                <td><?= $usu['nom_completo'] ?></td>    
                 <td><?= $usu['pecho'] ?></td>
                 <td><?= $usu['cintura'] ?></td>
                 <td><?= $usu['cadera'] ?></td>
                 <td><?= $usu['brazo_izq'] ?></td>
                 <td><?= $usu['brazo_der'] ?></td>
                 
-
-           
-                
-
-                <!--con este metodo GET vamos a poder ver la informacion que estamos enviando-->
 
                 <td>
                     <form method="GET" action="../eliminar/eliminar_medidas.php" >
@@ -95,10 +121,21 @@ $resul=$SQL->fetchAll();
             </tr>
 
         <?php
-        } //se cierra el recorrido cerrando la llave
+        } 
         ?>
     </table>
-
+    <br>
+        <div class="text-center" role="toolbar" aria-label="Toolbar with button groups">
+                <div class="btn-group me-2" role="group" aria-label="First group" aling>
+                    <?php
+                    for ($i = 1; $i <= $total_paginas; $i++) {
+                        echo "<a class='btn btn-primary'  href='tabla_medidas.php?pagina=" . $i . "'> " . $i . " </a>";
+                    }
+                    echo "<a href='tabla_medidas.php?pagina=$total_paginas'>" . "<i class='fa fa-arrow-right'></i>"
+                        . "</a></center>";
+                    ?>
+                </div>
+            </div>
 
 </body>
 

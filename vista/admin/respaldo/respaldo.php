@@ -2,7 +2,7 @@
 //Datos de la base de datos
 $mysqlDatabaseName ='gym-zona';
 $mysqlUserName ='root';
-$mysqlPassword ='270605';
+$mysqlPassword ='';
 $mysqlHostName ='localhost';
 $mysqlExportPath ='gym-zona.sql';
 

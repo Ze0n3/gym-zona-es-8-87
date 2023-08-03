@@ -1,60 +1,3 @@
-<?php
-require_once("../../../base_datos/bd.php");
-$daba = new Database();
-$conex = $daba->conectar();
-
-$control2 = $conex->prepare("SELECT * From usuarios WHERE tipo_usuario = 3");
-$control2->execute();
-$query2 = $control2->fetch();
-?>
-
-<?php
-    if ((isset($_POST["validar_V"])) && ($_POST["validar_V"] == "user")) {
-
-    $cedula = $_POST['docu'];
-    $peso= $_POST['peso'];
-    $bmi= $_POST['bmi'];
-    $grasa= $_POST['grasa'];
-    $musculo= $_POST['musculo'];
-    $agua= $_POST['agua'];
-    $grasa_v= $_POST['grasa_v'];
-    $hueso= $_POST['hueso'];
-    $metabo= $_POST['metabo'];
-    $proteina= $_POST['proteina'];
-    $obesidad= $_POST['obesidad'];
-    $edad= $_POST['fecha'];
-
-    // $estado = $_POST['estado'];
-
-    $validar1 = $conex->prepare("SELECT * FROM datos WHERE documentos='$cedula'");
-    $validar1->execute();
-    $queryi1 = $validar1->fetch();
-
-    if ($cedula == "" || $peso == ""|| $bmi == ""|| $grasa == ""|| $musculo == ""|| $agua == ""|| $grasa_v == ""|| $hueso == ""|| $metabo == ""|| $proteina == ""|| $obesidad == ""|| $edad == "" ) {
-        
-        echo '<script>alert ("EXISTEN DATOS VACIOS");</script>';
-        echo '<script>window.location="datos.php"</script>';
-
-    } 
-    // else if ($queryi1) {
-      
-    //     echo '<script>alert ("LOS DATOS INGRESADOS SON INCORRECTOS");</script>';
-    //     echo '<script>window.location="datos.php"</script>';
-    // } 
-
-     else {
-        $insertsql3= $conex->prepare ("INSERT INTO datos(documentos,peso,bmi,grasa,musculo,agua,grasa_v,hueso,metabo,proteina,obesidad,fecha_regi) VALUES ('$cedula','$peso','$bmi','$grasa','$musculo','$agua','$grasa_v','$hueso','$metabo','$proteina','$obesidad','$edad')");
-        $insertsql3->execute();
-        $inser = $insertsql3->fetch();
-        echo '<script>alert ("REGISTRO EXITOSO");</script>';
-        echo '<script>window.location="../index.php"</script>';
-        }
-    
-
-    }
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -66,7 +9,7 @@ $query2 = $control2->fetch();
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Suscripciones</title>
+    <title>DATOS</title>
 
     <link href="../../../img/logo_gym.png"  rel="icon">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
@@ -84,96 +27,152 @@ $query2 = $control2->fetch();
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 </head>
-
 <body class="bg-gradient-primary">
-<a class="btn btn success" href="../index.php" style="margin-left: 3.6%; margin-top:0%; position:absolute;">  
-    <i class="bi bi-chevron-left" style="padding:10px 14px 10px 10px; color:#fff; font-size:15px; background-color:#0d6efd; border-radius:10px;"> REGRESAR</i>
-    </a>
 
+<a class="btn btn success" href="../index.php" style="margin-left: 3.6%; margin-top:3%; position:absolute;">
+        <i class="bi bi-chevron-left"
+            style="padding:10px 14px 10px 10px; color:#fff; font-size:15px; background-color:#0d6efd; border-radius:10px;">
+            REGRESAR</i>
+    </a><br>
+<form class="user" name="user" method="post">
     <div class="container">
-
         <div class="card o-hidden border-0 shadow-lg my-5">
             <div class="card-body p-0">
                 <!-- Nested Row within Card Body -->
                 <div class="row">
-                    <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
-                    <div class="col-lg-12">
+                    <div class="col-lg-8">
                         <div class="p-5">
                             <div class="text-center">
-                                <h1 class="h4 text-gray-900 mb-4">Datos fisicos del clientes</h1>
+                                <h1 class="h4 text-gray-900 mb-4">DATOS</h1>
                             </div>
-                            <form class="user" name="user" method="post">
-                                <div class="form-group row">
-                                    <div class="col-sm-4 mb-0 mb-sm-4">
-                                    <label>Documento</label>
-                                        <select name="docu" class="form-control " id="exampleFirstName" required>
-                                            <option value="">Seleccione el documento del Cliente...</option>
-                                            <?php
-                                            do {
-                                            ?>
-                                                <option value="<?php echo ($query2['documento']) ?>"> <?php echo ($query2['nom_completo']) ?> </option> 
-                                            <?php
-                                                } while ($query2 = $control2->fetch());
-                                            ?>
-                                        </select>
-                                    </div>
-                                    <div class="col-sm-4  mb-0 mb-sm-4">
-                                    <label>Peso</label>
-                                        <input type="text" class="form-control" id="exampleLastName" name="peso"
-                                            placeholder="peso" maxlength="4" oninput="maxlengthNumber(this);" onkeypress="return(solonumeros(event));" pattern=".{4,.}"  title="Solo se aceptan 4 numeros" required>
-                                    </div>
-                                    <div class="col-sm-4 mb-0 mb-sm-4">
-                                    <label>BMI</label>
-                                        <input type="text" class="form-control" id="exampleFirstName" name="bmi" 
-                                            placeholder="bmi" maxlength="4" oninput="maxlengthNumber(this);" onkeypress="return(solonumeros(event));" pattern=".{4,.}" title="Solo se aceptan 4 numeros" required>
-                                    </div>
+<?php
+require_once("../../../base_datos/bd.php");
+$daba = new Database();
+$conex = $daba->conectar();
+session_start();
+include("../../../controller/validar.php");
+
+$control2 = $conex->prepare("SELECT * From usuarios WHERE tipo_usuario = 3");
+$control2->execute();
+$query2 = $control2->fetch();
+?>
+
+<?php
+    if ((isset($_POST["validar_V"]))) {
+
+    $cedula = $_POST['validar_V'];
+    $peso= $_POST['peso'];
+
+    // $estado = $_POST['estado'];
+
+    $validar1 = $conex->prepare("SELECT * FROM usuarios WHERE documento='$cedula'");
+    $validar1->execute();
+    $estatura = $validar1->fetch();
+
+    if ($cedula == ""  ) {
+        
+        echo '<script>alert ("EXISTEN DATOS VACIOS");</script>';
+        echo '<script>window.location="datos.php"</script>';
+
+    } 
+     else {
+        $estatura_metros = $estatura['estatura'] / 100; // Convertir la estatura de cm a metros
+        $imc = $peso / ($estatura_metros * $estatura_metros);
+        $bmi = round($imc, 2);
+        
+        if ($estatura['genero'] === 'Femenino') {
+            $sexo = 2;
+        } else {
+            $sexo = 1;
+        }
+        $porcentaje_grasa_corporal = 1.2 * $bmi + 0.23 * $estatura['edad'] - 10.8 * $sexo - 5.4;
+        $grasa = round($porcentaje_grasa_corporal, 2);
+
+        // Estimar la grasa visceral basada en el IMC
+    if ($bmi < 18.5) {
+        // Si el IMC es menor a 18.5, se considera un valor promedio de grasa visceral de 10
+        $grasa_v = 10;
+    } elseif ($bmi >= 18.5 && $bmi < 25) {
+        // Si el IMC está entre 18.5 y 24.9, se considera un valor promedio de grasa visceral de 7
+        $grasa_v = 7;
+    } elseif ($bmi >= 25 && $bmi < 30) {
+        // Si el IMC está entre 25 y 29.9, se considera un valor promedio de grasa visceral de 14
+        $grasa_v = 14;
+    } else {
+        // Si el IMC es mayor o igual a 30, se considera un valor promedio de grasa visceral de 20
+        $grasa_v = 20;
+    }
+
+    $musculo = 100 - ($grasa + $grasa_v);
+    $total = $grasa + $musculo + $grasa_v;
+
+    $agua_porcentaje = 50; // Puedes ajustar este valor según tus necesidades
+    $hueso_porcentaje = 15; // Puedes ajustar este valor según tus necesidades
+
+    $agua = $total * ($agua_porcentaje / 100);
+    $hueso = $total * ($hueso_porcentaje / 100);
+
+    $obesidad =  ($grasa + $musculo + $grasa_v + $agua + $hueso) - 100;
+
+
+    // Cálculo del metabolismo basal
+    if ($sexo === 0) { // Mujer
+        $metabolismo = 655 + (9.6 * $peso) + (1.8 * $estatura['estatura']) - (4.7 * $estatura['edad']);
+    } else { // Hombre
+        $metabolismo = 66 + (13.7 * $peso) + (5 * $estatura['estatura']) - (6.8 * $estatura['edad']);
+    }
+    
+    // Calcular el valor de proteina
+    $proteina = $peso * 0.83;
+
+    date_default_timezone_set('America/Bogota');
+    $fecha = date ('Y-m-d' );
+
+        $insertsql3= $conex->prepare ("INSERT INTO datos(documentos,peso,bmi,grasa,musculo,agua,grasa_v,hueso,metabo,proteina,obesidad,fecha_regi) VALUES ('$cedula','$peso','$bmi','$grasa','$musculo','$agua','$grasa_v','$hueso','$metabolismo','$proteina','$obesidad','$fecha')");
+        $insertsql3->execute();
+        echo '<script>alert ("REGISTRO EXITOSO");</script>';
+        echo '<script>window.location="./datos.php"</script>';
+        }
+    }
+                                    elseif ((isset($_POST["consul"]))){
                                         
-                                    <div class="col-sm-4 mb-0 mb-sm-4">
-                                    <label>Grasa</label>
-                                        <input type="text" class="form-control" id="exampleFirstName" name="grasa" 
-                                            placeholder="grasa" maxlength="4" oninput="maxlengthNumber(this);" onkeypress="return(solonumeros(event));" pattern=".{4,.}" title="Solo se aceptan 4 numeros" required>
-                                    </div>
-                                    <div class="col-sm-4 mb-0 mb-sm-4">
-                                    <label>Musculo</label>
-                                        <input type="text" class="form-control" id="exampleLastName" name="musculo" 
-                                            placeholder="musculo" maxlength="4" oninput="maxlengthNumber(this);" onkeypress="return(solonumeros(event));" pattern=".{4,.}" title="Solo se aceptan 4 numeros" required>
-                                    </div>
-                                    <div class="col-sm-4 mb-0 mb-sm-4">
-                                    <label>Agua</label>
-                                        <input type="text" class="form-control" id="exampleFirstName" name="agua"
-                                            placeholder="agua" maxlength="4" oninput="maxlengthNumber(this);" onkeypress="return(solonumeros(event));" pattern=".{4,.}" title="Solo se aceptan 4 numeros" required>
-                                    </div>
-                                    <div class="col-sm-4 mb-0 mb-sm-4">
-                                    <label>Grasa_V</label> 
-                                        <input type="text" class="form-control" id="exampleLastName" name="grasa_v" 
-                                            placeholder="grasa_v" maxlength="4" oninput="maxlengthNumber(this);" onkeypress="return(solonumeros(event));" pattern=".{4,.}" title="Solo se aceptan 4 numeros" required> 
-                                    </div>                    
+                                    
+                                    if ($_POST['doc_cli'] == "") {
+        
+                                        echo '<script>alert ("INGRESE EL NUMERO DE DOCUMENTO DEL CLIENTE");</script>';
+                                        echo '<script>window.location="./datos.php"</script>';
+                                    
+                                    }else{
+                                        
 
-                                    <div class="col-sm-4 mb-0 mb-sm-4">
-                                    <label>Hueso</label>
-                                        <input type="text" class="form-control" id="exampleFirstName" name="hueso" onkeypress="return(solonumeros(event));" pattern=".{4,.}"  title="Solo se aceptan 4 numeros" 
-                                            placeholder="hueso" maxlength="4"  oninput="maxlengthNumber(this);" required>
-                                    </div>
-                                    <div class="col-sm-4 mb-0 mb-sm-4">
-                                    <label>Metabo</label>
-                                        <input type="text" class="form-control" id="exampleFirstName" name="metabo" 
-                                            placeholder="matabo" maxlength="4" oninput="maxlengthNumber(this);" onkeypress="return(solonumeros(event));" pattern=".{4,.}"  title="Solo se aceptan 4 numeros" required>
-                                    </div>
-                                    <div class="col-sm-4 mb-0 mb-sm-4">
-                                    <label>Proteina</label>
-                                        <input type="text" class="form-control" id="exampleFirstName" name="proteina" 
-                                            placeholder="proteina" maxlength="4" oninput="maxlengthNumber(this);" onkeypress="return(solonumeros(event));" pattern=".{4,.}"  title="Solo se aceptan 4 numeros" required>
-                                    </div>
-                                    <div class="col-sm-4 mb-0 mb-sm-4">
-                                    <label>Obesidad</label>
-                                        <input type="text" class="form-control" id="exampleFirstName" name="obesidad" 
-                                            placeholder="obesidad" maxlength="4" oninput="maxlengthNumber(this);" onkeypress="return(solonumeros(event));" pattern=".{4,.}"  title="Solo se aceptan 4 numeros" required>
-                                    </div>
-                                    <div class="col-sm-4 mb-3 mb-sm-4">
-                                        <label>Fecha</label>
-                                            <input type="date" class="form-control" id="fecha" name="fecha" >
-                                    </div> 
+                                        $cli = $_POST['doc_cli'];
 
+                                        $consu = $conex->prepare("SELECT * FROM usuarios WHERE documento = '$cli' AND tipo_usuario = 3");
+                                        $consu ->execute();
+                                        $ho = $consu->fetch();
+
+                                        if($ho){
+
+                                            date_default_timezone_set('America/Bogota');
+                                            $fechaActual = date ('Y-m-d' );
+                                            $fin = date("Y-m-d",strtotime($fechaActual."+ 30 days")); 
+                                    ?>
+                                    <form class="user" method="post" name="user">
+                                    <div class="form-group row">
+                                        <div class="col-sm-6 mb-3 mb-sm-0"></br>
+                                            <label>Documento</label>
+                                            <h2 style="color: white;"><?php echo $_POST['doc_cli']?></h2>
+                                        </div>
+                                        <div class="col-sm-6 mb-3 mb-sm-0"></br>
+                                            <label>Nombre Completo</label>
+                                            <h2 style="color: white;"><?php echo $ho['nom_completo']?></h2>
+                                        </div>
+                                        <div class="col-sm-6 mb-3 mb-sm-0"></br>
+                                        <label>Peso</label>
+                                            <input type="number" class="form-control" id="peso" name="peso"
+                                                placeholder="peso" onclick="ponerbmi()" maxlength="4" oninput="ponerpeso();">
+                                        </div>
+                                    </div>
                                     <!-- SOLO NUMERO,LONGITUD -->
                                     <script>
                                             function maxlengthNumber(obj) {
@@ -209,14 +208,9 @@ $query2 = $control2->fetch();
                                                 }
                                             }
                                         </script>
-
-                                    
-
-        
                                 </div>
-                                
                                 <input type="submit" class="btn btn-primary  btn-block" name="enviar">
-                                <input type="hidden" name="validar_V" value="user">
+                                <input type="hidden" name="validar_V" value="<?php echo $_POST['doc_cli']?>">
                             </form>
                             <hr>
                             
@@ -258,3 +252,32 @@ $query2 = $control2->fetch();
 </body>
 
 </html>
+<?php
+}
+else {
+    echo '<script>alert ("NO HAY NINGUN CLIENTE CON ESE NUMERO DE DOCUMENTO");</script>';
+    echo '<script>window.location="./datos.php"</script>';
+    }
+    }
+}
+else{
+        
+    ?>
+    <form class="user" method="post" name="user">
+        <div class="form-group row" >
+            <div class="col-sm-6 mb-3 mb-sm-0" id="div">
+                <label>Documento del cliente</label>
+                <input type="number"
+                        class="form-control" id="exampleFirstName" pattern="(?=.*\e)[0-9]{6,10}"
+                        maxlength="10" name="doc_cli" placeholder="Numero de documentos"
+                        oninput="maxlengthNumber(this);" title="Solo se aceptan numeros" required>
+            </div>
+            <div class="col-sm-6 mb-3 mb-sm-0">
+                <input type="hidden" name="docu"  value="">
+                <button type="submit"  name="consul" onclick="show();" class="btn btn-primary btn-user btn-block" >Consultar</button>
+            </div><br>
+            </form>
+            <?php
+            }
+
+?>

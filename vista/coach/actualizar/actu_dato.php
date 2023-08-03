@@ -2,18 +2,21 @@
 require_once("../../../base_datos/bd.php");
 $daba = new Database();
 $conex = $daba->conectar();
+session_start();
+include("../../../controller/validar.php");
 
-$editar = $_GET['editar'];
+$editar = $_GET['docu'];
+$id = $_GET['id'];
 
-$con = $conex->prepare("SELECT * FROM datos INNER JOIN usuarios ON datos.documentos = usuarios.documento WHERE documentos='$editar'");
+$con = $conex->prepare("SELECT * FROM datos INNER JOIN usuarios ON datos.documentos = usuarios.documento WHERE documentos='$editar' and id_datos='$id'");
 $con -> execute();
 $fila = $con-> fetch();
 ?>
 
 <?php
-    if ((isset($_POST["validar_V"])) && ($_POST["validar_V"] == "user")) {
+    if ((isset($_POST["validar_V"]))) {
 
-    $cedula = $_POST['nombre'];
+    $cedula = $editar;
     $peso= $_POST['peso'];
     $bmi= $_POST['bmi'];
     $grasa= $_POST['grasa'];
@@ -26,22 +29,13 @@ $fila = $con-> fetch();
     $obesidad= $_POST['obesidad'];
     $fecha= $_POST['fecha'];
 
-    // $estado = $_POST['estado'];
-
-    $validar1 = $conex->prepare("SELECT * FROM datos WHERE documentos='$editar'");
-    $validar1->execute();
-    $queryi1 = $validar1->fetch();
 
     if ($cedula == "" || $peso == ""|| $bmi == ""|| $grasa == ""|| $musculo == ""|| $agua == ""|| $grasa_v == ""|| $hueso == ""|| $metabo == ""|| $proteina == ""|| $obesidad == ""|| $fecha == "" ) {
         
         echo '<script>alert ("EXISTEN DATOS VACIOS");</script>';
         echo '<script>window.location="actu_dato.php"</script>';
 
-    } else if (!$queryi1) {
-      
-        echo '<script>alert ("LOS DATOS INGRESADOS SON INCORRECTOS");</script>';
-        echo '<script>windows.location="actu_dato.php"</script>';
-    } 
+    }
      else {
         $insertsql3= $conex->prepare ("UPDATE datos SET peso='$peso', bmi='$bmi',grasa='$grasa', musculo='$musculo', agua='$agua', grasa_v='$grasa_v', hueso='$hueso', metabo='$metabo', proteina='$proteina', obesidad='$obesidad', fecha_regi='$fecha' WHERE documentos='$editar'");
         $insertsql3->execute();
@@ -67,7 +61,7 @@ $fila = $con-> fetch();
 
     <title>Actualizacion datos</title>
 
-    <link href="../../../img/logo_gym.png" rel="icon">
+    <link href="../../../img/logo_gym.png"  rel="icon">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 
     <!-- Custom fonts for this template-->
@@ -84,9 +78,11 @@ $fila = $con-> fetch();
 </head>
 
 <body class="bg-gradient-primary">
-<a class="btn btn success" href="../tablas/tabla_datos.php" style="margin-left: 3.6%; margin-top:0%; position:absolute;">  
-    <i class="bi bi-chevron-left" style="padding:10px 14px 10px 10px; color:#fff; font-size:15px; background-color:#0d6efd; border-radius:10px;"> REGRESAR</i>
-    </a>
+<a class="btn btn success" href="../tablas/tabla_datos.php" style="margin-left: 3.6%; margin-top:3%; position:absolute;">
+        <i class="bi bi-chevron-left"
+            style="padding:10px 14px 10px 10px; color:#fff; font-size:15px; background-color:#0d6efd; border-radius:10px;">
+            REGRESAR</i>
+    </a><br>
 
     <div class="container">
 
@@ -104,68 +100,64 @@ $fila = $con-> fetch();
                                 <div class="form-group row">
                                     <div class="col-sm-12 mb-3 mb-sm-0">
                                         <label>Nombre del Cliente </label>
-                                        <input type="text" style="margin-bottom:10px;" class="form-control" id="exampleFirstName"  name="nombre" value="<?php echo $fila['nom_completo'] ?>" required>
+                                        <h2 style="color: white;"><?php echo $fila['nom_completo']?></h2>
                                     </div>
                                     <div class="col-sm-4" style="margin-bottom:10px;">
                                     <label>Peso</label>
                                         <input type="number" min="1" class="form-control" id="exampleLastName" name="peso" maxlength="4" oninput="maxlengthNumber(this);"
-                                            placeholder="peso" title="Solo se aceptan numeros" required>
+                                            placeholder="peso" title="Solo se aceptan numeros" value="<?= $fila['peso'] ?>" required>
                                     </div>
                                     <div class="col-sm-4 mb-3 mb-sm-0">
                                     <label>BMI </label>
-                                        <input type="number" min="1" style="margin-bottom:10px;" class="form-control"  maxlength="4" oninput="maxlengthNumber(this);"id="exampleFirstName" name="bmi"
-                                            placeholder="bmi" title="Solo se aceptan numeros" required>
+                                        <input type="number"  style="margin-bottom:10px;" class="form-control"   name="bmi"
+                                             title="Solo se aceptan numeros" value="<?= $fila['bmi'] ?>" >
                                     </div>
                                    
                                     <div class="col-sm-4">
                                     <label>Grasa </label>
-                                        <input type="number" min="1" style="margin-bottom:10px;" class="form-control" maxlength="4" oninput="maxlengthNumber(this);" id="exampleFirstName" name="grasa"
-                                            placeholder="grasa" title="Solo se aceptan numeros" required>
+                                        <input type="number"  style="margin-bottom:10px;" class="form-control"  name="grasa"
+                                            placeholder="grasa" title="Solo se aceptan numeros" value="<?= $fila['grasa'] ?>" >
                                     </div>
                                     <div class="col-sm-4 mb-3 mb-sm-0">
                                     <label>Musculo </label>
-                                        <input type="number" min="1" style="margin-bottom:10px;" class="form-control" maxlength="4" oninput="maxlengthNumber(this);" id="exampleLastName" name="musculo"
-                                            placeholder="musculo" title="Solo se aceptan numeros" required>
+                                        <input type="number"  style="margin-bottom:10px;" class="form-control" name="musculo"
+                                            placeholder="musculo" title="Solo se aceptan numeros" value="<?= $fila['musculo'] ?>" >
                                     </div>
                                     <div class="col-sm-4 ">
                                     <label>Agua </label>
-                                        <input type="number" min="1" style="margin-bottom:10px;" class="form-control" maxlength="4" oninput="maxlengthNumber(this);" id="exampleFirstName" name="agua"
-                                            placeholder="agua" title="Solo se aceptan numeros" required>
+                                        <input type="number" style="margin-bottom:10px;" class="form-control" name="agua"
+                                            placeholder="agua" title="Solo se aceptan numeros" value="<?= $fila['agua'] ?>" required>
                                     </div>
                                     <div class="col-sm-4 mb-3 mb-sm-0">
                                     <label>Grasa_V </label>
                                         <input type="number" min="1" style="margin-bottom:10px;" class="form-control" maxlength="4" oninput="maxlengthNumber(this);" id="exampleLastName" name="grasa_v"
-                                            placeholder="grasa_v" title="Solo se aceptan numeros" required> 
+                                            placeholder="grasa_v" title="Solo se aceptan numeros" value="<?= $fila['grasa_v'] ?>" required> 
                                     </div>                    
 
                                     <div class="col-sm-4 ">
                                         <label>Hueso</label>
                                         <input type="number" min="1" style="margin-bottom:10px;" class="form-control" maxlength="4" oninput="maxlengthNumber(this);" id="exampleFirstName" name="hueso"
-                                            placeholder="hueso" title="Solo se aceptan numeros" required>
+                                            placeholder="hueso" title="Solo se aceptan numeros" value="<?= $fila['hueso'] ?>" required>
                                     </div>
                                     <div class="col-sm-4 mb-3 mb-sm-0">
-                                    <label>Metabo </label>
-                                        <input type="number" min="1" style="margin-bottom:10px;" class="form-control" maxlength="4" oninput="maxlengthNumber(this);" id="exampleFirstName" name="metabo"
-                                            placeholder="matabo" title="Solo se aceptan numeros" required>
+                                    <label>Metabolismo </label>
+                                        <input type="number" style="margin-bottom:10px;" class="form-control" name="metabo"
+                                             title="Solo se aceptan numeros"value="<?= $fila['metabo'] ?>">
                                     </div>
                                     <div class="col-sm-4 mb-3 mb-sm-0">
                                     <label>Proteina </label>
-                                        <input type="number" min="1" style="margin-bottom:10px;" class="form-control" maxlength="4" oninput="maxlengthNumber(this);" id="exampleFirstName" name="proteina"
-                                            placeholder="proteina" title="Solo se aceptan numeros" required>
+                                        <input type="number"  style="margin-bottom:10px;" class="form-control"  name="proteina"
+                                             title="Solo se aceptan numeros" value="<?= $fila['proteina'] ?>" >
                                     </div>
                                     <div class="col-sm-4 mb-3 mb-sm-0">
                                         <label>Obesidad </label>
                                         <input type="number" min="1" style="margin-bottom:10px;" class="form-control" maxlength="4" oninput="maxlengthNumber(this);" id="exampleFirstName" name="obesidad"
-                                            placeholder="obesidad" title="Solo se aceptan numeros" required>
+                                            placeholder="obesidad" title="Solo se aceptan numeros" value="<?= $fila['obesidad'] ?>" required>
                                     </div>
                                     <div class="col-sm-4 mb-3 mb-sm-0">
                                         <label>Fecha: </label>
-                                            <input type="date" class="form-control" id="exampleFirstName" name="fecha">
-                                    </div>      
-
-
-                                    
-        
+                                            <input type="date" class="form-control" id="exampleFirstName" value="<?= $fila['fecha_regi'] ?>" name="fecha" >
+                                    </div>
                                 </div>
 
                                 <!-- SOLO NUMERO,LONGITUD -->
