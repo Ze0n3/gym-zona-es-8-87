@@ -1,10 +1,9 @@
 <?php
 session_start();
-include("../../../controller/validar.php");
+require_once("../../../base_datos/bd.php");
 $daba = new Database();
 $conex = $daba->conectar();
-session_start();
-//creamos la consulta
+include("../../../controller/validar.php");
 
 
 $por_pagina = 5;
@@ -66,7 +65,7 @@ echo "<center><a href='tabla_venta.php?pagina=1'>" . "<i class='fa fa-arrow-left
 </head>
 
 <body>
-    <a class="btn btn success" href="../index.php" style="margin-left: 3.6%; margin-top:3%; position:absolute;">  
+<a class="btn btn success" href="../index.php" style="margin-left: -45%; margin-top:3%; position:absolute;">  
     <i class="bi bi-chevron-left" style="padding:10px 14px 10px 10px; color:#fff; font-size:15px; background-color:#0d6efd; border-radius:10px;"> REGRESAR</i>
     </a>
 

@@ -4,7 +4,6 @@ require_once ("../barcode/vendor/autoload.php");
 require_once("../../../base_datos/bd.php");
 $daba = new Database();
 $conex = $daba->conectar();
-session_start();
 include("../../../controller/validar.php");
 //creamos la consulta
 $SQL = $conex->prepare ("SELECT * FROM datos" );
@@ -53,7 +52,7 @@ echo "<center><a href='tabla_medidas.php?pagina=1'>" . "<i class='fa fa-arrow-le
     <link rel="stylesheet" href=" https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
     <title>Lista de datos</title>
-    <link href="../../../img1/logo9.png" rel="icon">
+    <link href="../../../img/logo_gym.png"  rel="icon">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 </head>
 
@@ -127,10 +126,7 @@ echo "<center><a href='tabla_medidas.php?pagina=1'>" . "<i class='fa fa-arrow-le
                     </form>
                 </td>
                 <td>
-                    <form method="GET" action="../actualizar/actu_dato.php" >
-                        <input type="hidden" name="editar" value="<?= $usu['documentos'] ?>">
-                        <button type="submit">Editar</button>
-                    </form>
+                    <a class="btn btn-success" name="agregar" href='../actualizar/actu_dato.php?docu=<?php echo $usu['documentos']?>&id=<?php echo $usu['id_datos']?>'>Actualizar</a>
                 </td>
                 
             </tr>

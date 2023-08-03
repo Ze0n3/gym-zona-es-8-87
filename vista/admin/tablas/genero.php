@@ -3,7 +3,6 @@ session_start();
 require_once("../../../base_datos/bd.php");
 $daba = new Database();
 include("../../../controller/validar.php");
-session_start();
 $conex = $daba->conectar();
 
 //creamos la consulta
@@ -80,7 +79,6 @@ echo "<center><a href='tabla_genero.php?pagina=1'>" . "<i class='fa fa-arrow-lef
         <!--El th se crea la cabecera-->
         <thead>
             <tr>
-                <th>Id_genero</th>
                 <th>Genero</th>
                 <th colspan="2">Accion</th>
             </tr>
@@ -93,7 +91,6 @@ echo "<center><a href='tabla_genero.php?pagina=1'>" . "<i class='fa fa-arrow-lef
             <!--El td sirve para sirve para crear las columnas-->
             <!--En cada td se va a mostrar los datos de una tabla usando variables por ejemplo: $variable['nombre del campo de la tabla que queremos que se vea']-->
             <tr>
-                <td><?= $usu['id_genero'] ?></td>
                 <td><?= $usu['genero'] ?></td>
             
                 
@@ -104,12 +101,6 @@ echo "<center><a href='tabla_genero.php?pagina=1'>" . "<i class='fa fa-arrow-lef
                     <form method="GET" action="../eliminar/eliminar_genero.php" >
                         <input type="hidden" name="elimin" value="<?= $usu['id_genero'] ?>">
                         <button type="submit" onclick="return confirm('¿Esta seguro de eliminar este usuario?');">Eliminar</button>
-                    </form>
-                </td>
-                <td>
-                    <form method=" GET" action="#" >
-                        <input type="hidden" name="editar" value="<?= $usu['id_genero'] ?>">
-                        <button type="submit">Editar</button>
                     </form>
                 </td>
             </tr>

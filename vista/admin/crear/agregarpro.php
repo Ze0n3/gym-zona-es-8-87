@@ -55,7 +55,7 @@ include("../../../controller/validar.php");
 if (isset($_GET['consul'])){
     $codigo = $_GET["codigo"];
 
-    $statement = $conex->prepare("SELECT * FROM productos WHERE id_producto = '$codigo' or nom_producto LIKE '%$codigo%'");
+    $statement = $conex->prepare("SELECT * FROM productos WHERE id_producto='$codigo' or nom_producto LIKE '%$codigo%' and docu_ingre ='".$_SESSION['docu']."'");
     $statement->execute();
     $resultados = $statement->fetchAll();
 
@@ -92,36 +92,18 @@ elseif($resultados){
         <td><?= $pro['nom_producto'] ?></td>
         <td><?= $pro['can_inicial']?></td>
         <td><?= $_GET['cantidad']?></td>
-        <td><a class="btn btn-success" name="agregar" href='agregarAlCarrito.php?id=<?php echo $pro['id_producto']?>&canti=<?php echo $canti?>'><i class="bi bi-cart-check-fill"></i></a></td>
+        <td><a class="btn btn-success" name="agregar" href='sumarcan.php?id=<?php echo $pro['id_producto']?>&canti=<?php echo $_GET['cantidad']?>'><i class="bi bi-cart-check-fill"></i></a></td>
     </tr>
-    <br>
     <?php 
     }
+    ?>
+    <a class="btn btn-danger" href="./agregarpro.php"><i class="bi bi-cart-x"></i>Cancelar</a>
+    <?php
 } 
- elseif (isset($_GET["enviar"])) {
-    
-        $nombre = $_GET['nom'];
-        $valor = $_GET['total'];
-
-        if ($nombre == "" || $valor == "") {
-        
-            echo '<script>alert ("EXISTEN DATOS VACIOS");</script>';
-            echo '<script>window.location="agregarpro.php"</script>';
-    
-        }
-        else{
-        $insertsql2 = $conex->prepare ("INSERT INTO tip_servicio(servicio,precio) VALUES ('$nombre','$valor')");
-        $insertsql2->execute();
-        echo '<script>alert ("Registro Exitoso, Gracias");</script>';
-        echo '<script>window.location="agregarpro.php"</script>';
-        }
-    }
+ 
             else{ 
-                ?>
-                <div class="alert alert-warning">
-                        <strong>Error:</strong> El producto que buscas no existe
-                    </div>
-                <?php
+                echo '<script>alert (" El producto que buscas no existe en tu inventario");</script>';
+                echo '<script>window.location="./agregarpro.php"</script>';
             }
         }
         else{
@@ -131,7 +113,7 @@ elseif($resultados){
                                 <h1 class="h4 text-gray-900 mb-4">AGREGAR CANTIDAD DE PRODUCTOS</h1>
                             </div>
                                 <div class="form-group row">
-                                    <div class="col-sm-8 mb-0 mb-sm-0"><br>
+                                    <div class="col-sm-8 mb-0 mb-sm-0">
                                         <label for="codigo">Código de barras o Nombre del producto:</label>
                                         <input autocomplete="off" autofocus class="form-control"  title="" maxlength="15" name="codigo" type="text" id="codigo" placeholder="Ingrese sobre el producto" required>
                                     </div>

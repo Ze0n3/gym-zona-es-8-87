@@ -3,7 +3,6 @@ session_start();
 require_once("../../../base_datos/bd.php");
 $daba = new Database();
 $conex = $daba->conectar();
-session_start();
 include("../../../controller/validar.php");
 
 
@@ -34,8 +33,6 @@ echo "<center>".'Lista Vacia'."</center>";
 } else
 
 echo "<center><a href='t_pro.php?pagina=1'>" . "<i class='fa fa-arrow-left'></i>" . "</a>";
-?>
-
 ?>
 
 <!DOCTYPE html>
@@ -80,8 +77,7 @@ echo "<center><a href='t_pro.php?pagina=1'>" . "<i class='fa fa-arrow-left'></i>
                 <th>PRECIO</th>
                 <th>CANTIDAD INICIAL</th>
                 <th>QUIEN</th>
-                <th>CANTIDAD FINAL</th>
-                <th colspan="2">ACCION</th>
+
 
             </tr>
         </thead>
@@ -100,25 +96,6 @@ echo "<center><a href='t_pro.php?pagina=1'>" . "<i class='fa fa-arrow-left'></i>
                 <td><?= $usu['precio'] ?></td>
                 <td><?= $usu['can_inicial'] ?></td>
                 <td><?= $usu['nom_completo'] ?></td>
-                <td><?= $usu['can_final'] ?></td>
-
-            
-                
-
-                <!--con este metodo GET vamos a poder ver la informacion que estamos enviando-->
-
-                <td>
-                    <form method="GET" action="../eliminar/eliminar_pro.php" >
-                        <input type="hidden" name="elimin" value="<?= $usu['id_producto'] ?>">
-                        <button type="submit" onclick="return confirm('¿Esta seguro de eliminar este usuario?');">Eliminar</button>
-                    </form>
-                </td>
-                <td>
-                    <form method="GET" action="../actualizar/actualizar_prod.php" >
-                        <input type="hidden" name="editar" value="<?= $usu['id_producto'] ?>">
-                        <button type="submit">Editar</button>
-                    </form>
-                </td>
                 
             </tr>
 

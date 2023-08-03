@@ -58,45 +58,80 @@ $query2 = $control2->fetch();
 ?>
 
 <?php
-    if ((isset($_POST["validar_V"])) && ($_POST["validar_V"] == "user")) {
+    if ((isset($_POST["validar_V"]))) {
 
-    $cedula = $_POST['docu'];
+    $cedula = $_POST['validar_V'];
     $peso= $_POST['peso'];
-    $musculo= $_POST['musculo'];
-    $hueso= $_POST['hueso'];
-    $metabo= $_POST['metabo'];
-    $obesidad= $_POST['obesidad'];
 
     // $estado = $_POST['estado'];
 
-    $validar1 = $conex->prepare("SELECT estatura FROM usuario WHERE documentos='$cedula'");
+    $validar1 = $conex->prepare("SELECT * FROM usuarios WHERE documento='$cedula'");
     $validar1->execute();
-    $queryi1 = $validar1->fetch();
+    $estatura = $validar1->fetch();
 
-    $alturaMetros = $queryi1 / 100;
-    $imc = $peso / ($alturaMetros * $alturaMetros);
-
-    // Redondear el resultado a dos decimales
-    $bmi = round($imc, 2);
-
-    if ($cedula == "" || $peso == ""|| $bmi == ""|| $grasa == ""|| $musculo == ""|| $agua == ""|| $grasa_v == ""|| $hueso == ""|| $metabo == ""|| $proteina == ""|| $obesidad == ""|| $edad == "" ) {
+    if ($cedula == ""  ) {
         
         echo '<script>alert ("EXISTEN DATOS VACIOS");</script>';
         echo '<script>window.location="datos.php"</script>';
 
     } 
-    // else if ($queryi1) {
-      
-    //     echo '<script>alert ("LOS DATOS INGRESADOS SON INCORRECTOS");</script>';
-    //     echo '<script>window.location="datos.php"</script>';
-    // } 
-
      else {
-        $insertsql3= $conex->prepare ("INSERT INTO datos(documentos,peso,bmi,grasa,musculo,agua,grasa_v,hueso,metabo,proteina,obesidad,fecha_regi) VALUES ('$cedula','$peso','$bmi','$grasa','$musculo','$agua','$grasa_v','$hueso','$metabo','$proteina','$obesidad','$edad')");
+        $estatura_metros = $estatura['estatura'] / 100; // Convertir la estatura de cm a metros
+        $imc = $peso / ($estatura_metros * $estatura_metros);
+        $bmi = round($imc, 2);
+        
+        if ($estatura['genero'] === 'Femenino') {
+            $sexo = 2;
+        } else {
+            $sexo = 1;
+        }
+        $porcentaje_grasa_corporal = 1.2 * $bmi + 0.23 * $estatura['edad'] - 10.8 * $sexo - 5.4;
+        $grasa = round($porcentaje_grasa_corporal, 2);
+
+        // Estimar la grasa visceral basada en el IMC
+    if ($bmi < 18.5) {
+        // Si el IMC es menor a 18.5, se considera un valor promedio de grasa visceral de 10
+        $grasa_v = 10;
+    } elseif ($bmi >= 18.5 && $bmi < 25) {
+        // Si el IMC está entre 18.5 y 24.9, se considera un valor promedio de grasa visceral de 7
+        $grasa_v = 7;
+    } elseif ($bmi >= 25 && $bmi < 30) {
+        // Si el IMC está entre 25 y 29.9, se considera un valor promedio de grasa visceral de 14
+        $grasa_v = 14;
+    } else {
+        // Si el IMC es mayor o igual a 30, se considera un valor promedio de grasa visceral de 20
+        $grasa_v = 20;
+    }
+
+    $musculo = 100 - ($grasa + $grasa_v);
+    $total = $grasa + $musculo + $grasa_v;
+
+    $agua_porcentaje = 50; // Puedes ajustar este valor según tus necesidades
+    $hueso_porcentaje = 15; // Puedes ajustar este valor según tus necesidades
+
+    $agua = $total * ($agua_porcentaje / 100);
+    $hueso = $total * ($hueso_porcentaje / 100);
+
+    $obesidad =  ($grasa + $musculo + $grasa_v + $agua + $hueso) - 100;
+
+
+    // Cálculo del metabolismo basal
+    if ($sexo === 0) { // Mujer
+        $metabolismo = 655 + (9.6 * $peso) + (1.8 * $estatura['estatura']) - (4.7 * $estatura['edad']);
+    } else { // Hombre
+        $metabolismo = 66 + (13.7 * $peso) + (5 * $estatura['estatura']) - (6.8 * $estatura['edad']);
+    }
+    
+    // Calcular el valor de proteina
+    $proteina = $peso * 0.83;
+
+    date_default_timezone_set('America/Bogota');
+    $fecha = date ('Y-m-d' );
+
+        $insertsql3= $conex->prepare ("INSERT INTO datos(documentos,peso,bmi,grasa,musculo,agua,grasa_v,hueso,metabo,proteina,obesidad,fecha_regi) VALUES ('$cedula','$peso','$bmi','$grasa','$musculo','$agua','$grasa_v','$hueso','$metabolismo','$proteina','$obesidad','$fecha')");
         $insertsql3->execute();
-        $inser = $insertsql3->fetch();
         echo '<script>alert ("REGISTRO EXITOSO");</script>';
-        echo '<script>window.location="../index.php"</script>';
+        echo '<script>window.location="./datos.php"</script>';
         }
     }
                                     elseif ((isset($_POST["consul"]))){
@@ -137,26 +172,6 @@ $query2 = $control2->fetch();
                                             <input type="number" class="form-control" id="peso" name="peso"
                                                 placeholder="peso" onclick="ponerbmi()" maxlength="4" oninput="ponerpeso();">
                                         </div>
-                                        <div class="col-sm-6 mb-3 mb-sm-0"></br>
-                                        <label>Musculo</label>
-                                            <input type="number" class="form-control" id="exampleLastName" name="musculo"
-                                                placeholder="musculo" maxlength="4" oninput="maxlengthNumber(this);">
-                                        </div>
-                                        <div class="col-sm-6 mb-3 mb-sm-0"></br>
-                                        <label>Hueso</label>
-                                            <input type="number" class="form-control" id="exampleFirstName" name="hueso"
-                                                placeholder="hueso" maxlength="4" oninput="maxlengthNumber(this);">
-                                        </div>
-                                        <div class="col-sm-6 mb-3 mb-sm-0"></br>
-                                        <label>Metabo</label>
-                                            <input type="number" class="form-control" id="exampleFirstName" name="metabo"
-                                                placeholder="matabo" maxlength="4" oninput="maxlengthNumber(this);">
-                                        </div>
-                                        <div class="col-sm-6 mb-3 mb-sm-0"></br>
-                                        <label>Obesidad</label>
-                                            <input type="number" class="form-control" id="exampleFirstName" name="obesidad"
-                                                placeholder="obesidad" maxlength="4" oninput="maxlengthNumber(this);">
-                                        </div>
                                     </div>
                                     <!-- SOLO NUMERO,LONGITUD -->
                                     <script>
@@ -195,7 +210,7 @@ $query2 = $control2->fetch();
                                         </script>
                                 </div>
                                 <input type="submit" class="btn btn-primary  btn-block" name="enviar">
-                                <input type="hidden" name="validar_V" value="user">
+                                <input type="hidden" name="validar_V" value="<?php echo $_POST['doc_cli']?>">
                             </form>
                             <hr>
                             

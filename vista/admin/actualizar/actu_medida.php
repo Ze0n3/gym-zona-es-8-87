@@ -2,10 +2,9 @@
 require_once("../../../base_datos/bd.php");
 $daba = new Database();
 $conex = $daba->conectar();
-include("../../controller/validar.php");
-?>
+session_start();
+include("../../../controller/validar.php");
 
-<?php
 $editar = $_GET['editar'];
 
 $con = $conex->prepare("SELECT * FROM medidas INNER JOIN usuarios ON medidas.doc_cliente = usuarios.documento WHERE doc_cliente='$editar'");

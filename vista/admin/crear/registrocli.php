@@ -4,25 +4,15 @@ $daba = new Database();
 $conex = $daba->conectar();
 session_start();
 include("../../../controller/validar.php");
-?>
-
-<?php
 
 $control = $conex->prepare("SELECT * From tip_user WHERE id_tip_user ");
 $control->execute();
 $query = $control->fetch();
 
-?>
-
-<?php
-
 $control1 = $conex->prepare("SELECT * From genero");
 $control1->execute();
 $query1 = $control1->fetch();
 
-?>
-
-<?php
 if (isset($_POST["validar_V"]) == "cli") {
     $cedula = $_POST['documento'];
     $nombre = $_POST['nombre'];

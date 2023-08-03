@@ -11,8 +11,6 @@ if (isset($_POST["inise"])) {
     $cone = $con -> prepare("SELECT * FROM usuarios WHERE documento='$docu' AND estado=2");
     $cone -> execute();
     $fil = $cone -> fetch();
-    
-
 
     if ($fil && password_verify($contra, $fil['contraseña'])) {
         $_SESSION['docu'] = $fil['documento'];
@@ -35,4 +33,5 @@ if (isset($_POST["inise"])) {
         echo '<script>window.location="../error.html"</script>';
         exit();
     }
+
 }

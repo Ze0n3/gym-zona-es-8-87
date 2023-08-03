@@ -29,8 +29,7 @@ if (isset($_POST["validar_V"]) == "cli") {
     $direccion = $_POST['direccion'];
     $correo = $_POST['correo'];
     $fecha_n = $_POST['nacimiento'];
-    $estatura = $_POST['estatura'];
-
+    $usu = $_POST['usuario'];
 
     $fecha_nacimiento = $fecha_n;
     $dia_actual = date("Y-m-d");
@@ -41,15 +40,15 @@ if (isset($_POST["validar_V"]) == "cli") {
     $validar->execute();
     $queryi = $validar->fetch();
 
-    if ($cedula == "" || $nombre == "" || $edad == "" || $genero == "" || $telefono == "" || $direccion == "" || $correo == "" ) {
+    if ($cedula == "" || $nombre == "" || $usu == "" || $edad == "" || $genero == "" || $telefono == "" || $direccion == "" || $correo == "" ) {
 
         echo '<script>alert ("EXISTEN DATOS VACIOS");</script>';
-        echo '<script>window.location="../tablas/t_cliente.php"</script>';
+        echo '<script>window.location="../tablas/t_coach.php"</script>';
     } else {
         $insertsql = $conex->prepare("UPDATE usuarios SET nom_completo = '$nombre',edad = '$edad',estatura = '$estatura',genero = '$genero',usuario = '$usu',fecha_nacimiento = '$fecha_n', telefono = '$telefono' ,direccion = '$direccion',correo =  '$correo' WHERE documento = '$cedula'");
         $insertsql->execute();
         echo '<script>alert ("SE A ACTUALIZADO CORRECTAMENTE");</script>';
-        echo '<script>window.location="../tablas/t_cliente.php"</script>';
+        echo '<script>window.location="../tablas/t_coach.php"</script>';
     }
 }
 
@@ -66,7 +65,7 @@ if (isset($_POST["validar_V"]) == "cli") {
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Actualizar Cliente</title>
+    <title>Actualizar Coach</title>
 
     <link href="../../../img/logo_gym.png" rel="icon">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
@@ -84,7 +83,7 @@ if (isset($_POST["validar_V"]) == "cli") {
 
 <body class="bg-gradient-primary">
     
-    <a class="btn btn success" href="../tablas/t_usu.php" style="margin-left: 3.6%; margin-top:3%; position:absolute;">
+    <a class="btn btn success" href="../tablas/t_coach.php" style="margin-left: 3.6%; margin-top:3%; position:absolute;">
         <i class="bi bi-chevron-left"
             style="padding:10px 14px 10px 10px; color:#fff; font-size:15px; background-color:#0d6efd; border-radius:10px;">
             REGRESAR</i>
@@ -99,7 +98,7 @@ if (isset($_POST["validar_V"]) == "cli") {
                         <div class="col-lg-10">
                             <div class="p-5">
                                 <div class="text-center">
-                                    <h1 class="h4 text-gray-900 mb-4">Actualizar Cliente</h1>
+                                    <h1 class="h4 text-gray-900 mb-4">Actualizar Coach</h1>
                                 </div>
                                 <form class="user">
                                     <div class="form-group row">
@@ -110,10 +109,16 @@ if (isset($_POST["validar_V"]) == "cli") {
                                                 oninput="maxlengthNumber(this);" value="<?php echo $queryi['documento'] ?>" disabled>
                                 
                                         </div>
-                                            <div class="col-sm-4">
-                                            <label>Nombre completo </label>
-                                            <input type="text" class="form-control form-control-user"  maxlength="50" oninput="validarletras(this);" onkeypress="return(sololetras(event));" id="exampleFirstName" name="nombre" value="<?php echo $queryi['nom_completo']?>">
-                                            </div>
+                                        <div class="col-sm-4">
+                                        <label>Nombre completo </label>
+                                        <input type="text" class="form-control form-control-user"  maxlength="50" oninput="validarletras(this);" onkeypress="return(sololetras(event));" id="exampleFirstName" name="nombre" value="<?php echo $queryi['nom_completo']?>">
+                                        </div>
+                                        <div class="col-sm-4"><br>
+                                        <label>Usuario</label>
+                                            <input type="text" style="margin-bottom:24px;" class="form-control form-control-user"
+                                                id="exampleFirstName" name="usuario" maxlength="4"
+                                                oninput="maxlengthNumber(this);" value="<?php echo $queryi['usuario'] ?>">
+                                        </div>
                                         <div class="col-sm-4"><br>
                                         <label>Genero</label>
                                             <select name="genero" style="margin-bottom:24px;" class="form-control form-control-user"
@@ -127,12 +132,6 @@ if (isset($_POST["validar_V"]) == "cli") {
                                                 } while ($query1 = $control1->fetch());
                                                 ?>
                                             </select>
-                                        </div>
-                                        <div class="col-sm-4"><br>
-                                        <label>Estatura</label>
-                                            <input type="number" style="margin-bottom:24px;" class="form-control form-control-user"
-                                                id="exampleFirstName" name="estatura" maxlength="4"
-                                                oninput="maxlengthNumber(this);" value="<?php echo $queryi['estatura'] ?>">
                                         </div>
                                         <div class="col-sm-4"><br>
                                         <label>Numero de telefono</label>

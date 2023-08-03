@@ -2,7 +2,8 @@
 require_once("../../../base_datos/bd.php");
 $cone = new Database();
 $conex = $cone->conectar();
-include("../../controller/validar.php");
+session_start();
+include("../../../controller/validar.php");
 
 $editar = $_GET['editar'];
 
@@ -47,7 +48,7 @@ $queryi = $validar->fetch();
 
     <title>Actualizar Productos</title>
 
-    <link href="../../img1/logo9.png" rel="icon">
+    <link href="../../../img/logo_gym.png" rel="icon">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 
     <!-- Custom fonts for this template-->
@@ -82,26 +83,19 @@ $queryi = $validar->fetch();
                                 <div class="form-group row">
                                     
                                     <div class="col-sm-6">
-                                    <label>Nombre del producto</label>
+                                    <label>Nombre del producto</label><br>
                                     <input type="text" class="form-control" id="exampleFirstName" name="n_producto" value="<?php echo $queryi['nom_producto'] ?>">
                                     </div>
                                     <div class="col-sm-6 mb-3 mb-sm-0">
-                                    <label>Precio</label>
+                                    <label>Precio</label><br>
                                         <input type="number" title="Solo se aceptan numeros" class="form-control" id="exampleFirstName" name="precio"
                                         value="<?php echo $queryi['precio'] ?>" oninput="maxlengthNumber(this);">
                                     </div>
                                     <div class="col-sm-6">
-                                    <label>Cantidad inicial</label>
+                                    <label>Cantidad inicial</label><br>
                                         <input type="number" min=0 class="form-control" id="exampleLastName" name="c_inicial" title="Solo se aceptan numeros" 
                                         value="<?php echo $queryi['can_inicial'] ?>"  oninput="maxlengthNumber(this);">
-                                    </div>
-                                    <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <label>Cantidad final </label>
-                                        <input type="number" class="form-control" id="exampleFirstName" name="c_final"
-                                        value="<?php echo $queryi['can_final'] ?>"  oninput="maxlengthNumber(this);">
-                                    </div>
-                                    
-                                   
+                                    </div>                   
                                 </div>
                                 
                                 <input type="submit" class="btn btn-primary btn-block" name="Suscribir">

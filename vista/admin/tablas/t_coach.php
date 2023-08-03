@@ -3,7 +3,6 @@ session_start();
 require_once("../../../base_datos/bd.php");
 $daba = new Database();
 $conex = $daba->conectar();
-session_start();
 include("../../../controller/validar.php");
 
 // PAGINACION
@@ -33,7 +32,6 @@ if ($total_paginas == 0) {
 } else
 
     echo "<center><a href='t_cliente.php?pagina=1'>" . "<i class='fa fa-arrow-left'></i>" . "</a>";
-?>
 ?>
 
 <!DOCTYPE html>
@@ -84,7 +82,6 @@ if ($total_paginas == 0) {
                     <th>usuario</th>
                     <th>Tipo Usuario</th>
                     <th>Genero</th>
-
                     <th>Estado</th>
                     <th colspan="2">Accion</th>
                     <th colspan="2">Cambiar estado</th>
@@ -130,7 +127,7 @@ if ($total_paginas == 0) {
                         </form>
                     </td>
                     <td>
-                        <form method="GET" action="../actualizar/actualizar_clien.php">
+                        <form method="GET" action="../actualizar/actualizar_coach.php">
                             <input type="hidden" name="editar" value="<?= $usu['documento'] ?>">
                             <button type="submit">Editar</button>
                         </form>

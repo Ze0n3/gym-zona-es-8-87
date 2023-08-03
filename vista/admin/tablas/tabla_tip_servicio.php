@@ -1,9 +1,9 @@
 <?php
 session_start();
-include("../../../controller/validar.php");
+require_once("../../../base_datos/bd.php");
 $daba = new Database();
 $conex = $daba->conectar();
-session_start();
+include("../../../controller/validar.php");
 //creamos la consulta
 $SQL = $conex->prepare ("SELECT * FROM tip_servicio" );
 $SQL -> execute();
@@ -80,7 +80,7 @@ echo "<center><a href='tabla_tip_servicio.php?pagina=1'>" . "<i class='fa fa-arr
                 <th>Servicio</th>
                 <th>Precio</th>
                 
-                <th colspan="1">ACCION</th>
+                <th colspan="2">ACCION</th>
                 
             </tr>  
         </thead>
@@ -104,7 +104,13 @@ echo "<center><a href='tabla_tip_servicio.php?pagina=1'>" . "<i class='fa fa-arr
 
                 <!--con este metodo GET vamos a poder ver la informacion que estamos enviando-->
 
-                
+                <td>
+                        <form method="GET" action="../eliminar/eliminar_servi.php">
+                            <input class="btn btn-primary" type="hidden" name="elimin" value="<?= $usu['id_tip_serv'] ?>">
+                            <button type="submit"
+                                onclick="return confirm('¿Esta seguro de eliminar este usuario?');">Eliminar</button>
+                        </form>
+                    </td>
                 <td>
                     <form method=" GET" action="../actualizar/actualizar_tip_serv.php" >
                         <input type="hidden" name="editar" value="<?= $usu['id_tip_serv'] ?>">

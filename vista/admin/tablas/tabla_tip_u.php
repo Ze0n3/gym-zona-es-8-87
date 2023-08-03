@@ -1,9 +1,9 @@
 <?php
 session_start();
-include("../../../controller/validar.php");
+require_once("../../../base_datos/bd.php");
 $daba = new Database();
 $conex = $daba->conectar();
-session_start();
+include("../../../controller/validar.php");
 //creamos la consulta
 $SQL = $conex->prepare ("SELECT * FROM tip_user" );
 $SQL -> execute();

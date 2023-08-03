@@ -76,13 +76,13 @@ $hora = date(" H:i:s");
                                         <div class="col-sm-6">
                                             <label>Fecha: </label>
                                             
-                                            <h2 name="fecha" value=""><?php echo $fechaActual; ?></h2>
+                                            <h2 name="fecha" style="color: white;" value=""><?php echo $fechaActual; ?></h2>
                                             
                                             
                                         </div>
                                         <div class="col-sm-6 mb-3 mb-sm-0">
                                         <label>Hora: </label>
-                                            <h2   name="hora" value=""><?php echo $hora; ?></h2>
+                                            <h2 style="color: white;" name="hora" value=""><?php echo $hora; ?></h2>
                                         </div>
                                     </div>
                                 </div>
@@ -96,8 +96,8 @@ $hora = date(" H:i:s");
                 <div class="text-center">
                     <div class="form-group row">
                         <div class="col-sm-4 mb-0 mb-sm-0">
-                            <label for="codigo">Cantidad Agregar</label>
-                            <input autocomplete="off" min="1" pattern="(?=.*\e){1,3}" title="No se admiten letras"  maxlength="3" oninput="maxlengthNumber(this);" autofocus class="form-control" name="canti" type="number" id="codigo" placeholder="Digete la cantidad" required>
+                            <label for="codigo">Cantidad A vender </label>
+                            <input autocomplete="off" min="1" pattern="(?=.*\e){1,3}" title="No se admiten letras"  maxlength="3" oninput="maxlengthNumber(this);" autofocus class="form-control" name="canti" type="number" id="codigo" placeholder="Digete la cantidad" >
                         </div>
                         <script>
                                             function maxlengthNumber(obj) {
@@ -120,7 +120,7 @@ $hora = date(" H:i:s");
 
                         <div class="col-sm-4 mb-0 mb-sm-0">
                             <label for="codigo">Código de barras o Nombre del producto:</label>
-                            <input autocomplete="off" autofocus class="form-control" title="" maxlength="15" name="codigo" type="text" id="codigo" placeholder="Ingrese sobre el producto" required>
+                            <input autocomplete="off" autofocus class="form-control" title="" maxlength="15" name="codigo" type="text" id="codigo" placeholder="Ingrese sobre el producto" >
                         </div>
                         <div class="col-sm-4 mb-0 mb-sm-0">
                         <button type="submit"  name="consul" class="btn btn-primary  btn-block">Consultar</button>
@@ -137,7 +137,7 @@ $hora = date(" H:i:s");
 
 
 
-                    $statement = $conex->prepare("SELECT * FROM productos WHERE id_producto = '$codigo' or nom_producto LIKE '%$codigo%'");
+                    $statement = $conex->prepare("SELECT * FROM productos WHERE id_producto = '$codigo' or nom_producto LIKE '%$codigo%' and docu_ingre ='".$_SESSION['docu']."'");
                     $statement->execute();
                     $resultados = $statement->fetchAll();
 
@@ -179,7 +179,7 @@ $hora = date(" H:i:s");
                         <td><?= $pro['id_producto'] ?></td>
                         <td><?= $pro['cod_producto'] ?></td>
                         <td><?= $pro['nom_producto'] ?></td>
-                        <td><?= $pro['can_final']?></td>
+                        <td><?= $pro['can_inicial']?></td>
                         <td><?= $_GET['canti']?></td>
                         <td><?= $pro['precio']?></td>
                         <td><a class="btn btn-success" name="agregar" href='agregarAlCarrito.php?id=<?php echo $pro['id_producto']?>&canti=<?php echo $canti?>'><i class="bi bi-cart-check-fill"></i></a></td>
@@ -281,7 +281,7 @@ $hora = date(" H:i:s");
                     <div class="form-group row">
                 <div class="col-sm-6 mb-3 mb-sm-0">
                     <label>Documento del cliente</label>
-                    <input type="number" min="900000000" pattern="(?=.*\e)[0-9]{6,10}" title="Solo se aceptan numeros" maxlength="10" oninput="maxlengthNumber(this);" class="form-control " id="exampleFirstName" name="doc_cli" required >
+                    <input type="number" min="900000000" pattern="(?=.*\e)[0-9]{6,10}" title="Solo se aceptan numeros" maxlength="10" oninput="maxlengthNumber(this);" class="form-control " id="exampleFirstName" name="doc_cli"  >
                 </div>
                 <div class="col-sm-3 mb-3 mb-sm-0">
                     <input type="hidden" name="docu" >

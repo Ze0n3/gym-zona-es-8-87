@@ -36,8 +36,6 @@ if ($total_paginas == 0) {
 
     echo "<center><a href='t_cliente.php?pagina=1'>" . "<i class='fa fa-arrow-left'></i>" . "</a>";
 ?>
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 

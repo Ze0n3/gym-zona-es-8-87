@@ -3,7 +3,6 @@ session_start();
 require_once("../../../base_datos/bd.php");
 $daba = new Database();
 $conex = $daba->conectar();
-session_start();
 include("../../../controller/validar.php");
 $por_pagina = 5;
 if (isset($_GET['pagina'])) {
@@ -32,8 +31,6 @@ if ($total_paginas == 0) {
 
     echo "<center><a href='t_usu.php?pagina=1'>" . "<i class='fa fa-arrow-left'></i>" . "</a>";
 ?>
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -91,9 +88,7 @@ if ($total_paginas == 0) {
                     <th>usuario</th>
                     <th>Tipo Usuario</th>
                     <th>Genero</th>
-
                     <th>Estado</th>
-                    <th colspan="2">Accion</th>
                 </tr>
             </thead>
 
@@ -120,24 +115,6 @@ if ($total_paginas == 0) {
 
                     <td>
                         <?= $usu['estado'] ?>
-                    </td>
-
-
-
-                    <!--con este metodo GET vamos a poder ver la informacion que estamos enviando-->
-
-                    <td>
-                        <form method="GET" action="../eliminar/eliminar_usu.php">
-                            <input class="btn btn-primary" type="hidden" name="elimin" value="<?= $usu['documento'] ?>">
-                            <button type="submit"
-                                onclick="return confirm('¿Esta seguro de eliminar este usuario?');">Eliminar</button>
-                        </form>
-                    </td>
-                    <td>
-                        <form method=" GET" action="../actualizar/actualizar_clien.php">
-                            <input type="hidden" name="editar" value="<?= $usu['documento'] ?>">
-                            <button type="submit">Editar</button>
-                        </form>
                     </td>
                 </tr>
 

@@ -1,9 +1,9 @@
 <?php
 session_start();
-include("../../../controller/validar.php");
+require_once("../../../base_datos/bd.php");
 $daba = new Database();
-session_start();
 $conex = $daba->conectar();
+include("../../../controller/validar.php");
 //creamos la consulta
 $SQL = $conex->prepare ("SELECT * FROM venta_serv");
 $SQL -> execute();
@@ -36,7 +36,6 @@ echo "<center>".'Lista Vacia'."</center>";
 } else
 
 echo "<center><a href='tabla_venta_s.php?pagina=1'>" . "<i class='fa fa-arrow-left'></i>" . "</a>";
-?>
 ?>
 
 <!DOCTYPE html>

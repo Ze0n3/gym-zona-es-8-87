@@ -28,7 +28,7 @@ $idVenta = $resultado === false ? 1 : $resultado->id_venta;
 
 $conex->beginTransaction();
 $sentencia = $conex->prepare("INSERT INTO det_venta(id_productos, id_venta, cantidad) VALUES (?, ?, ?);");
-$sentenciaExistencia = $conex->prepare("UPDATE productos SET can_final = can_final - ? WHERE id_producto = ?;");
+$sentenciaExistencia = $conex->prepare("UPDATE productos SET can_inicial = can_inicial - ? WHERE id_producto = ? AND docu_ingre ='".$_SESSION['docu']."';");
 foreach ($_SESSION["carrito"] as $producto) {
 	$total += $producto->total;
 	$sentencia->execute([$producto->id_producto, $idVenta, $producto->can_inicial]);
